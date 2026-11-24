@@ -54,7 +54,17 @@ sproutcare/
 ├── public/
 │   └── images/
 │       └── plants/                 # Botanical plant photography assets
-├── src/
+├── server/                         # Modular Backend (Express + Gemini AI)
+│   ├── routes/
+│   │   ├── identifyPlant.ts        # POST /api/identify-plant
+│   │   ├── plantAssistant.ts       # POST /api/plant-assistant
+│   │   └── diagnosePlant.ts        # POST /api/diagnose-plant
+│   ├── services/
+│   │   └── geminiClient.ts         # GoogleGenAI client + retry/fallback logic
+│   └── utils/
+│       ├── errorMapper.ts          # Transient error detection & friendly messages
+│       └── imageParser.ts          # Base64 / data URL / local image extraction
+├── src/                            # Modular Frontend (React + TypeScript + Tailwind)
 │   ├── components/
 │   │   ├── ErrorBoundary.tsx       # Fault-isolated error boundary
 │   │   ├── Navbar.tsx              # Responsive desktop & mobile navigation
@@ -67,6 +77,8 @@ sproutcare/
 │   │   ├── plants/                 # AddPlant, PlantDetailModal, PlantIllustration
 │   │   ├── reminders/              # Reminders, CareSchedule, PlantCareCalendar
 │   │   └── vacation/               # VacationModeModal
+│   ├── services/
+│   │   └── aiApi.ts                # Centralized typed API client for /api/*
 │   ├── data/
 │   │   ├── achievementCatalog.ts   # 16 achievement definitions
 │   │   ├── plantDatabase.ts        # Searchable houseplant & Indian plant catalog
@@ -91,7 +103,7 @@ sproutcare/
 │   ├── App.tsx                     # Root application state & layout
 │   ├── index.css                   # Tailwind CSS v4 theme & typography
 │   └── main.tsx                    # React entry point
-├── server.ts                       # Express server + Vite middleware + Gemini API routes
+├── server.ts                       # Lightweight Express + Vite entry point
 ├── index.html                      # HTML entry & Google Fonts
 ├── package.json
 ├── tsconfig.json

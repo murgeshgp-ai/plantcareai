@@ -2,6 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import { Plant, LightRequirement } from '../../types/plant';
 import { getTodayString } from '../../utils/dateUtils';
 import { searchPlantCatalog, PlantCatalogItem } from '../../data/plantDatabase';
+import { identifyPlant, AiApiError, PlantIdentificationResult } from '../../services/aiApi';
 import { 
   Upload, 
   X, 
@@ -30,18 +31,7 @@ interface AddPlantProps {
 
 type AddMode = 'ai' | 'manual';
 
-interface IdentificationResult {
-  isPlant: boolean;
-  commonName: string;
-  botanicalName: string;
-  confidence: string;
-  light: LightRequirement;
-  wateringDays: number;
-  fertilizingDays: number;
-  pruningDays: number;
-  illustrationType: Plant['illustrationType'];
-  careNotes: string;
-}
+type IdentificationResult = PlantIdentificationResult;
 
 const COMMON_SPECIES = [
   { 
@@ -293,46 +283,8 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
           await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
         }
 
-        const response = await fetch('/api/identify-plant', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ image: imagePreview }),
-        });
-
-        const data = await response.json().catch(() => null);
-
-        if (!response.ok || !data?.success) {
-          const isTemporary =
-            response.status === 503 ||
-            response.status === 429 ||
-            response.status === 500 ||
-            response.status === 502 ||
-            response.status === 504 ||
-            data?.isTemporary === true;
-
-          const friendlyMsg =
-            data?.error ||
-            (response.status === 503
-              ? 'The plant identification service is currently experiencing high demand.'
-              : response.status === 429
-              ? 'Plant identification requests are temporarily paused due to high traffic.'
-              : 'Plant identification service is temporarily unavailable.');
-
-          lastFriendlyMessage = friendlyMsg;
-
-          // If temporary and retries remain, loop to next attempt
-          if (attempt < MAX_ATTEMPTS && isTemporary) {
-            console.warn(`[Client Retry] Attempt ${attempt} failed with status ${response.status}. Retrying...`);
-            continue;
-          }
-
-          throw new Error(friendlyMsg);
-        }
-
-        // --- SUCCESSFUL IDENTIFICATION ---
-        const result: IdentificationResult = data.data;
+        // --- CALL CENTRALIZED AI API SERVICE ---
+        const result: IdentificationResult = await identifyPlant(imagePreview);
 
         if (!result.isPlant) {
           setAiError(
@@ -362,9 +314,11 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
         console.warn(`Identification attempt ${attempt} error:`, err);
         lastFriendlyMessage = err?.message || 'Temporary service issue. Please try again.';
 
-        if (attempt < MAX_ATTEMPTS) {
+        const isTemporary = err instanceof AiApiError ? err.isTemporary : true;
+        if (attempt < MAX_ATTEMPTS && isTemporary) {
           continue; // Retry loop
         }
+        break;
       }
     }
 

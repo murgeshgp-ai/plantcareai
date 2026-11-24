@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Plant } from '../../types/plant';
 import { HealthAssessment } from '../../types/health';
 import { calculatePlantHealthScore } from '../../utils/healthCalculator';
+import { sendPlantAssistantMessage } from '../../services/aiApi';
 import { 
   X, 
   Send, 
@@ -142,25 +143,12 @@ export const PlantAssistantModal: React.FC<PlantAssistantModalProps> = ({
         content: m.content,
       }));
 
-      const res = await fetch('/api/plant-assistant', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: apiMessages,
-          plantContext: getPlantContextPayload(),
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Failed to get a response from the plant care assistant.');
-      }
+      const reply = await sendPlantAssistantMessage(apiMessages, getPlantContextPayload());
 
       const assistantMsg: ChatMessage = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
-        content: data.reply || 'I am ready to help with your plant care questions.',
+        content: reply,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
 

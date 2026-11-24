@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Plant } from '../../types/plant';
 import { PlantDiagnosisResult, SeverityLevel, DiseaseCategory } from '../../types/diagnosis';
 import { HealthAssessment, LeafCondition, PestCondition, SoilCondition, OverallAppearance } from '../../types/health';
+import { diagnosePlant } from '../../services/aiApi';
 import {
   X,
   Upload,
@@ -223,22 +224,8 @@ export const PlantDiagnosisModal: React.FC<PlantDiagnosisModalProps> = ({
           }
         : undefined;
 
-      const response = await fetch('/api/diagnose-plant', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          image: finalBase64,
-          plantContext,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to analyze plant photograph. Please try again.');
-      }
-
-      setDiagnosisResult(data.data);
+      const diagnosis = await diagnosePlant(finalBase64, plantContext);
+      setDiagnosisResult(diagnosis);
     } catch (err: any) {
       console.error('Diagnosis error:', err);
       setErrorMessage(err.message || 'Unable to connect to the diagnosis service. Please try again.');
