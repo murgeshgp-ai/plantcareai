@@ -1,0 +1,8 @@
+{
+  "name": "Remix SproutCare - Plant Care \u0026 Routine Tracker",
+  "description": "A peaceful and modern plant care reminder app to track watering, fertilizing, pruning schedules, and stay on top of your plant routines.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
