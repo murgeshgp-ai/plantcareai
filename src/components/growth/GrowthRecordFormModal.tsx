@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { GrowthRecord } from '../types/growth';
-import { Plant } from '../types/plant';
-import { getTodayString } from '../utils/dateUtils';
+import { GrowthRecord } from '../../types/growth';
+import { Plant } from '../../types/plant';
+import { getTodayString } from '../../utils/dateUtils';
 import { X, Upload, Image as ImageIcon, Trash2, Calendar, Ruler, Leaf, AlertCircle } from 'lucide-react';
 
 interface GrowthRecordFormModalProps {

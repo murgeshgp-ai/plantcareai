@@ -1,32 +1,29 @@
 import React from 'react';
-import { Plant, CareType } from '../types/plant';
-import { GrowthRecord } from '../types/growth';
-import { HealthAssessment } from '../types/health';
+import { Plant, CareType } from '../../types/plant';
+import { GrowthRecord } from '../../types/growth';
+import { HealthAssessment } from '../../types/health';
 import { PlantIllustration } from './PlantIllustration';
-import { HealthScoreBadge } from './HealthScoreBadge';
-import { calculatePlantHealthScore, getHealthBadgeColors } from '../utils/healthCalculator';
-import { addDays, getDaysDifference, formatDueDateLabel, formatDatePretty } from '../utils/dateUtils';
-import { 
-  X, 
-  Droplets, 
-  Sparkles, 
-  Scissors, 
-  SunMedium, 
-  MapPin, 
-  Heart, 
+import { HealthScoreBadge } from '../health/HealthScoreBadge';
+import { calculatePlantHealthScore, getHealthBadgeColors } from '../../utils/healthCalculator';
+import { addDays, getDaysDifference, formatDueDateLabel, formatDatePretty } from '../../utils/dateUtils';
+import {
+  X,
+  Droplets,
+  Sparkles,
+  Scissors,
+  SunMedium,
+  MapPin,
+  Heart,
   Info,
   Check,
   Trash2,
   TrendingUp,
   ArrowRight,
-  ShieldCheck,
   Activity,
-  AlertTriangle,
   Lightbulb,
-  Calendar,
   HelpCircle,
   Bot,
-  Stethoscope
+  Stethoscope,
 } from 'lucide-react';
 
 interface PlantDetailModalProps {

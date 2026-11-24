@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Plant } from '../types/plant';
-import { GrowthRecord } from '../types/growth';
-import { getGrowthRecordsForPlant, calculateGrowthStatistics } from '../utils/growthStorage';
-import { formatDatePretty } from '../utils/dateUtils';
+import { Plant } from '../../types/plant';
+import { GrowthRecord } from '../../types/growth';
+import { getGrowthRecordsForPlant, calculateGrowthStatistics } from '../../utils/growthStorage';
+import { formatDatePretty } from '../../utils/dateUtils';
 import { GrowthChart } from './GrowthChart';
 import { GrowthRecordFormModal } from './GrowthRecordFormModal';
-import { PlantIllustration } from './PlantIllustration';
+import { PlantIllustration } from '../plants/PlantIllustration';
 import {
   TrendingUp,
   Ruler,
@@ -21,7 +21,6 @@ import {
   Sparkles,
   MapPin,
   ExternalLink,
-  ChevronDown
 } from 'lucide-react';
 
 interface GrowthTrackerProps {

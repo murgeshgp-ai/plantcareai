@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
-import { Plant, CareType, CareReminder } from '../types/plant';
-import { PlantIllustration } from './PlantIllustration';
-import { addDays, getDaysDifference, formatDueDateLabel, formatDatePretty, getTodayString } from '../utils/dateUtils';
-import { 
-  Bell, 
-  Droplets, 
-  Sparkles, 
-  Scissors, 
-  Check, 
-  AlertTriangle, 
-  Calendar, 
-  Clock, 
+import { Plant, CareType, CareReminder } from '../../types/plant';
+import { PlantIllustration } from '../plants/PlantIllustration';
+import { addDays, getDaysDifference, formatDueDateLabel } from '../../utils/dateUtils';
+import {
+  Droplets,
+  Sparkles,
+  Scissors,
+  Check,
+  AlertTriangle,
   CheckCircle2,
-  ChevronRight,
-  RotateCw
+  RotateCw,
 } from 'lucide-react';
 
 interface RemindersProps {

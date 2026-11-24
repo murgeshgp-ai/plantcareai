@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plant } from '../types/plant';
+import { Plant } from '../../types/plant';
 import { Sprout } from 'lucide-react';
 
 interface PlantIllustrationProps {

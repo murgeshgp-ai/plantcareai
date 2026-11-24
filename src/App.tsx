@@ -1,50 +1,54 @@
 import React, { useState, useEffect } from 'react';
+import { Sprout, RotateCcw, Palmtree, CheckCircle2, PowerOff } from 'lucide-react';
+
 import { Plant, CareType } from './types/plant';
 import { GrowthRecord } from './types/growth';
 import { HealthAssessment } from './types/health';
+import { UnlockedAchievement, UserActivityStats, AchievementWithProgress } from './types/achievement';
+import { VacationConfig } from './types/vacation';
+
 import { INITIAL_PLANTS } from './data/samplePlants';
 import { INITIAL_GROWTH_RECORDS } from './data/sampleGrowthRecords';
+
 import { Navbar, ActiveTab } from './components/Navbar';
-import { Dashboard } from './components/Dashboard';
-import { AddPlant } from './components/AddPlant';
-import { GrowthTracker } from './components/GrowthTracker';
-import { CareSchedule } from './components/CareSchedule';
-import { Reminders } from './components/Reminders';
-import { PlantDetailModal } from './components/PlantDetailModal';
-import { HealthAssessmentModal } from './components/HealthAssessmentModal';
-import { PlantAssistantModal } from './components/PlantAssistantModal';
-import { PlantDiagnosisModal } from './components/PlantDiagnosisModal';
-import { VacationModeModal } from './components/VacationModeModal';
-import { AchievementsModal } from './components/AchievementsModal';
-import { AchievementToast } from './components/AchievementToast';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Toast } from './components/Toast';
-import { DEFAULT_PLANT_PHOTOS } from './components/PlantIllustration';
+import { Dashboard } from './components/dashboard/Dashboard';
+import { AddPlant } from './components/plants/AddPlant';
+import { PlantDetailModal } from './components/plants/PlantDetailModal';
+import { DEFAULT_PLANT_PHOTOS } from './components/plants/PlantIllustration';
+import { GrowthTracker } from './components/growth/GrowthTracker';
+import { CareSchedule } from './components/reminders/CareSchedule';
+import { Reminders } from './components/reminders/Reminders';
+import { HealthAssessmentModal } from './components/health/HealthAssessmentModal';
+import { PlantDiagnosisModal } from './components/health/PlantDiagnosisModal';
+import { PlantAssistantModal } from './components/assistant/PlantAssistantModal';
+import { VacationModeModal } from './components/vacation/VacationModeModal';
+import { AchievementsModal } from './components/achievements/AchievementsModal';
+import { AchievementToast } from './components/achievements/AchievementToast';
+
 import { getTodayString, addDays, getDaysDifference, formatDatePretty } from './utils/dateUtils';
 import { loadAllGrowthRecords, saveAllGrowthRecords } from './utils/growthStorage';
 import { loadAllHealthAssessments, saveAllHealthAssessments, getLatestAssessmentForPlant } from './utils/healthStorage';
-import { 
-  loadUnlockedAchievements, 
-  saveUnlockedAchievements, 
-  loadUserActivityStats, 
-  saveUserActivityStats 
+import {
+  loadUnlockedAchievements,
+  saveUnlockedAchievements,
+  loadUserActivityStats,
+  saveUserActivityStats,
 } from './utils/achievementStorage';
-import { 
-  evaluateAchievements, 
-  recordCareAction, 
-  recordPlantAdded, 
-  recordGrowthRecordAdded, 
-  recordVacationActivated 
+import {
+  evaluateAchievements,
+  recordCareAction,
+  recordPlantAdded,
+  recordGrowthRecordAdded,
+  recordVacationActivated,
 } from './utils/achievementEvaluator';
-import { UnlockedAchievement, UserActivityStats, AchievementWithProgress } from './types/achievement';
-import { VacationConfig } from './types/vacation';
-import { 
-  isVacationActive, 
-  isVacationExpired, 
-  calculateVacationDuration, 
-  calculateVacationSummary 
+import {
+  isVacationActive,
+  isVacationExpired,
+  calculateVacationDuration,
+  calculateVacationSummary,
 } from './utils/vacationUtils';
-import { Sprout, RotateCcw, Palmtree, CheckCircle2, PowerOff } from 'lucide-react';
 
 const STORAGE_KEY = 'sproutcare_plants_data_v1';
 const VACATION_STORAGE_KEY = 'sproutcare_vacation_config_v1';
@@ -280,7 +284,6 @@ export default function App() {
 
   const handleSnoozeCare = (plantId: string, careType: CareType, days: number) => {
     const today = getTodayString();
-    let updatedPlantName = '';
     let success = false;
 
     setPlants((prevPlants) => {
@@ -288,7 +291,6 @@ export default function App() {
       const next = prevPlants.map((plant) => {
         if (plant.id !== plantId) return plant;
         matched = true;
-        updatedPlantName = plant.name;
 
         const copy: Plant = { ...plant };
         if (careType === 'water') {

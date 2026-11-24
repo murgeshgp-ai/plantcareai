@@ -6,7 +6,7 @@ import {
   VacationPrepItem, 
   PlantSurvivalCategory 
 } from '../types/vacation';
-import { addDays, getDaysDifference, getTodayString, formatDatePretty } from './dateUtils';
+import { addDays, getDaysDifference, getTodayString } from './dateUtils';
 
 /**
  * Calculates the total number of days of the vacation period.

@@ -1,7 +1,8 @@
 {
-  "name": "react-example",
+  "name": "sproutcare",
+  "description": "A peaceful and modern plant care, growth tracking, health monitoring, and routine reminder web application.",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",

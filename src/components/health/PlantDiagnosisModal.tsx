@@ -1,26 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Plant } from '../types/plant';
-import { PlantDiagnosisResult, SeverityLevel, DiseaseCategory } from '../types/diagnosis';
-import { HealthAssessment, LeafCondition, PestCondition, SoilCondition, OverallAppearance } from '../types/health';
-import { 
-  X, 
-  Upload, 
-  Camera, 
-  Sparkles, 
-  Stethoscope, 
-  AlertTriangle, 
-  CheckCircle2, 
-  Info, 
-  RotateCcw, 
-  ShieldAlert, 
-  Leaf, 
-  Droplets, 
-  Bug, 
-  Sun, 
-  Check, 
+import { Plant } from '../../types/plant';
+import { PlantDiagnosisResult, SeverityLevel, DiseaseCategory } from '../../types/diagnosis';
+import { HealthAssessment, LeafCondition, PestCondition, SoilCondition, OverallAppearance } from '../../types/health';
+import {
+  X,
+  Upload,
+  Camera,
+  Sparkles,
+  Stethoscope,
+  AlertTriangle,
+  CheckCircle2,
+  Info,
+  RotateCcw,
+  ShieldAlert,
+  Leaf,
+  Droplets,
+  Bug,
+  Sun,
+  Check,
   RefreshCw,
   Image as ImageIcon,
-  ArrowRight
 } from 'lucide-react';
 
 interface PlantDiagnosisModalProps {

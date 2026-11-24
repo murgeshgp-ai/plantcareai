@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { Plant, LightRequirement } from '../types/plant';
-import { getTodayString } from '../utils/dateUtils';
-import { searchPlantCatalog, PlantCatalogItem } from '../data/plantDatabase';
+import { Plant, LightRequirement } from '../../types/plant';
+import { getTodayString } from '../../utils/dateUtils';
+import { searchPlantCatalog, PlantCatalogItem } from '../../data/plantDatabase';
 import { 
   Upload, 
   X, 

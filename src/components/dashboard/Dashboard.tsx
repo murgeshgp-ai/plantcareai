@@ -1,31 +1,26 @@
 import React, { useState } from 'react';
-import { Plant, CareType } from '../types/plant';
-import { GrowthRecord } from '../types/growth';
-import { HealthAssessment } from '../types/health';
-import { AchievementWithProgress } from '../types/achievement';
-import { PlantIllustration } from './PlantIllustration';
-import { HealthScoreBadge } from './HealthScoreBadge';
-import { calculatePlantHealthScore, getHealthBadgeColors } from '../utils/healthCalculator';
-import { addDays, getDaysDifference, formatDueDateLabel, formatDatePretty } from '../utils/dateUtils';
-import { 
-  Droplets, 
-  Sparkles, 
-  Scissors, 
-  Search, 
-  Plus, 
-  SunMedium, 
-  MapPin, 
-  Check, 
+import { Plant, CareType } from '../../types/plant';
+import { GrowthRecord } from '../../types/growth';
+import { HealthAssessment } from '../../types/health';
+import { AchievementWithProgress } from '../../types/achievement';
+import { PlantIllustration } from '../plants/PlantIllustration';
+import { HealthScoreBadge } from '../health/HealthScoreBadge';
+import { calculatePlantHealthScore, getHealthBadgeColors } from '../../utils/healthCalculator';
+import { addDays, getDaysDifference, formatDueDateLabel, formatDatePretty } from '../../utils/dateUtils';
+import {
+  Droplets,
+  Sparkles,
+  Search,
+  Plus,
+  SunMedium,
+  MapPin,
+  Check,
   AlertCircle,
-  Clock,
   ArrowRight,
   TrendingUp,
   Activity,
-  Heart,
-  Filter,
-  Bot,
   Stethoscope,
-  Trophy
+  Trophy,
 } from 'lucide-react';
 
 interface DashboardProps {
@@ -52,7 +47,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
   allAssessments = [],
   allGrowthRecords = [],
   onOpenHealthAssessment,
-  onOpenAIAssistant,
   onOpenDiagnosis,
   achievements,
   onOpenAchievements,

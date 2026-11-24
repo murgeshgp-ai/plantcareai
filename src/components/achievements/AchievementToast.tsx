@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { AchievementWithProgress, AchievementTier } from '../types/achievement';
+import { AchievementWithProgress, AchievementTier } from '../../types/achievement';
 import { 
   Trophy, 
   X, 

@@ -1,26 +1,24 @@
 import React, { useState, useMemo } from 'react';
-import { Plant, CareType } from '../types/plant';
-import { 
-  getMonthCalendarDays, 
-  getCareEventsForCalendar, 
-  CalendarCareEvent, 
-  CalendarDay 
-} from '../utils/calendarUtils';
-import { getTodayString, formatDatePretty, getDaysDifference } from '../utils/dateUtils';
-import { PlantIllustration } from './PlantIllustration';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Droplets, 
-  Sparkles, 
-  Scissors, 
-  Check, 
-  AlertTriangle, 
-  Calendar as CalendarIcon, 
-  Clock, 
-  MapPin, 
+import { Plant, CareType } from '../../types/plant';
+import {
+  getMonthCalendarDays,
+  getCareEventsForCalendar,
+  CalendarCareEvent,
+  CalendarDay,
+} from '../../utils/calendarUtils';
+import { getTodayString, formatDatePretty, getDaysDifference } from '../../utils/dateUtils';
+import { PlantIllustration } from '../plants/PlantIllustration';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Droplets,
+  Sparkles,
+  Scissors,
+  Check,
+  AlertTriangle,
+  Calendar as CalendarIcon,
+  MapPin,
   ArrowRight,
-  Info
 } from 'lucide-react';
 
 interface PlantCareCalendarProps {

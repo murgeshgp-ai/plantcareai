@@ -1,15 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { 
-  AchievementWithProgress, 
-  AchievementCategory, 
-  AchievementTier, 
-  UserActivityStats, 
-  UnlockedAchievement 
-} from '../types/achievement';
-import { Plant } from '../types/plant';
-import { GrowthRecord } from '../types/growth';
-import { evaluateAchievements } from '../utils/achievementEvaluator';
-import { formatDatePretty } from '../utils/dateUtils';
+import {
+  AchievementWithProgress,
+  AchievementCategory,
+  AchievementTier,
+  UserActivityStats,
+  UnlockedAchievement,
+} from '../../types/achievement';
+import { Plant } from '../../types/plant';
+import { GrowthRecord } from '../../types/growth';
+import { evaluateAchievements } from '../../utils/achievementEvaluator';
+import { formatDatePretty } from '../../utils/dateUtils';
 import { 
   Trophy, 
   X, 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { HealthLabel } from '../types/health';
-import { getHealthLabel, getHealthBadgeColors } from '../utils/healthCalculator';
+import { HealthLabel } from '../../types/health';
+import { getHealthLabel, getHealthBadgeColors } from '../../utils/healthCalculator';
 
 interface HealthScoreBadgeProps {
   score: number;

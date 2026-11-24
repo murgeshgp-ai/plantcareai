@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { GrowthRecord } from '../types/growth';
-import { formatDatePretty } from '../utils/dateUtils';
+import { GrowthRecord } from '../../types/growth';
+import { formatDatePretty } from '../../utils/dateUtils';
 import { TrendingUp, Ruler } from 'lucide-react';
 
 interface GrowthChartProps {

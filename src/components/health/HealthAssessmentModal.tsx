@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
-import { Plant } from '../types/plant';
-import { 
-  HealthAssessment, 
-  LeafCondition, 
-  PestCondition, 
-  SoilCondition, 
-  OverallAppearance 
-} from '../types/health';
-import { calculateConditionScore } from '../utils/healthCalculator';
+import { Plant } from '../../types/plant';
+import {
+  HealthAssessment,
+  LeafCondition,
+  PestCondition,
+  SoilCondition,
+  OverallAppearance,
+} from '../../types/health';
+import { calculateConditionScore } from '../../utils/healthCalculator';
 import { HealthScoreBadge } from './HealthScoreBadge';
-import { getTodayString } from '../utils/dateUtils';
-import { 
-  X, 
-  Check, 
-  Leaf, 
-  Bug, 
-  Droplet, 
-  Sparkles, 
-  Calendar, 
-  FileText, 
-  AlertCircle,
-  HelpCircle
+import { getTodayString } from '../../utils/dateUtils';
+import {
+  X,
+  Check,
+  Leaf,
+  Bug,
+  Droplet,
+  Sparkles,
+  Calendar,
+  FileText,
+  HelpCircle,
 } from 'lucide-react';
 
 interface HealthAssessmentModalProps {

@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { Plant, CareType } from '../types/plant';
-import { PlantIllustration } from './PlantIllustration';
+import { Plant, CareType } from '../../types/plant';
+import { PlantIllustration } from '../plants/PlantIllustration';
 import { PlantCareCalendar } from './PlantCareCalendar';
-import { addDays, getDaysDifference, formatDueDateLabel, formatDatePretty } from '../utils/dateUtils';
-import { 
-  Droplets, 
-  Sparkles, 
-  Scissors, 
-  Check, 
-  Filter, 
-  Clock, 
+import { addDays, getDaysDifference, formatDueDateLabel, formatDatePretty } from '../../utils/dateUtils';
+import {
+  Droplets,
+  Sparkles,
+  Scissors,
+  Check,
   Calendar,
   AlertTriangle,
-  List
+  List,
 } from 'lucide-react';
 
 interface CareScheduleProps {

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Check, Info } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface ToastProps {
   message: string | null;
   onClose: () => void;
 }
 
-export const Toast: React.FC<ToastProps> = ({ message, onClose }) => {
+export const Toast: React.FC<ToastProps> = ({ message }) => {
   if (!message) return null;
 
   return (

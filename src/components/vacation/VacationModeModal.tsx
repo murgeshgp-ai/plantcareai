@@ -1,33 +1,27 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Plant, CareType } from '../types/plant';
-import { VacationConfig } from '../types/vacation';
-import { 
-  calculateVacationDuration, 
-  calculateVacationSummary, 
-  generatePreDepartureChecklist, 
-  categorizePlantSurvival,
-  isVacationActive
-} from '../utils/vacationUtils';
-import { addDays, getTodayString, formatDatePretty, getDaysDifference, isValidDateString } from '../utils/dateUtils';
-import { 
-  Palmtree, 
-  X, 
-  Calendar, 
-  Clock, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Info, 
-  Droplets, 
-  Sparkles, 
-  Scissors, 
-  Sun, 
-  ShieldCheck, 
-  MapPin, 
-  Check, 
-  PowerOff,
-  ChevronRight,
-  ArrowRight,
-  Sparkle
+import { Plant, CareType } from '../../types/plant';
+import { VacationConfig } from '../../types/vacation';
+import {
+  calculateVacationDuration,
+  calculateVacationSummary,
+  generatePreDepartureChecklist,
+  isVacationActive,
+} from '../../utils/vacationUtils';
+import { addDays, getTodayString, formatDatePretty, isValidDateString } from '../../utils/dateUtils';
+import {
+  Palmtree,
+  X,
+  Calendar,
+  Clock,
+  CheckCircle2,
+  AlertTriangle,
+  Droplets,
+  Sparkles,
+  Scissors,
+  Sun,
+  ShieldCheck,
+  MapPin,
+  Check,
 } from 'lucide-react';
 
 interface VacationModeModalProps {
@@ -90,7 +84,6 @@ export const VacationModeModal: React.FC<VacationModeModalProps> = ({
   const isReturnValid = isValidDateString(returnDate);
   const isDateOrderValid = Boolean(isDepartureValid && isReturnValid && returnDate > departureDate);
   const durationDays = isDateOrderValid ? calculateVacationDuration(departureDate, returnDate) : 0;
-  const isDepartureInPast = isDepartureValid && getDaysDifference(departureDate, todayStr) < 0;
 
   // Compute live vacation summary and pre-departure checklist using existing utilities
   const currentConfig: VacationConfig = useMemo(() => ({

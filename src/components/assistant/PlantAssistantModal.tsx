@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Plant } from '../types/plant';
-import { HealthAssessment } from '../types/health';
-import { calculatePlantHealthScore } from '../utils/healthCalculator';
+import { Plant } from '../../types/plant';
+import { HealthAssessment } from '../../types/health';
+import { calculatePlantHealthScore } from '../../utils/healthCalculator';
 import { 
   X, 
   Send, 

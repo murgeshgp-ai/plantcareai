@@ -1,4 +1,4 @@
-import { CareType, Plant } from './plant';
+import { CareType } from './plant';
 
 export type PlantSurvivalCategory = 'drought-tolerant' | 'moderate' | 'moisture-sensitive';
 
