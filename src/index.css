@@ -6,10 +6,20 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
+html,
+body {
+  overflow-x: clip;
+}
+
 body {
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, .font-display {
   font-family: var(--font-display);
+}
+
+h1, h2 {
+  text-wrap: balance;
 }

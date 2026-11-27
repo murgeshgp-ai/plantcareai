@@ -424,7 +424,7 @@ export const PlantDiagnosisModal: React.FC<PlantDiagnosisModalProps> = ({
             >
               {plants.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.name} ({p.species}) · {p.room}
+                  {p.name}{p.species ? ` (${p.species})` : ''} · {p.room}
                 </option>
               ))}
             </select>

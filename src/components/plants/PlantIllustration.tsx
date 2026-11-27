@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plant } from '../../types/plant';
 import { Sprout } from 'lucide-react';
 
@@ -28,6 +28,11 @@ export const PlantIllustration: React.FC<PlantIllustrationProps> = ({
 }) => {
   const [hasCustomError, setHasCustomError] = useState(false);
   const [hasDefaultError, setHasDefaultError] = useState(false);
+
+  useEffect(() => {
+    setHasCustomError(false);
+    setHasDefaultError(false);
+  }, [imageUrl, type]);
 
   // If user provided an imageUrl and it hasn't failed, show it; otherwise use the realistic botanical photo
   const defaultPhoto = DEFAULT_PLANT_PHOTOS[type] || DEFAULT_PLANT_PHOTOS.generic;

@@ -256,7 +256,7 @@ export const PlantAssistantModal: React.FC<PlantAssistantModalProps> = ({
             <option value="general">🌿 General Plant Care (No specific plant)</option>
             {plants.map((p) => (
               <option key={p.id} value={p.id}>
-                {p.name} ({p.species}) · {p.room}
+                {p.name}{p.species ? ` (${p.species})` : ''} · {p.room}
               </option>
             ))}
           </select>

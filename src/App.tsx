@@ -6,6 +6,7 @@ import { GrowthRecord } from './types/growth';
 import { HealthAssessment } from './types/health';
 import { UnlockedAchievement, UserActivityStats, AchievementWithProgress } from './types/achievement';
 import { VacationConfig } from './types/vacation';
+import { KarnatakaClimateZoneId } from './types/seasonal';
 
 import { INITIAL_PLANTS } from './data/samplePlants';
 import { INITIAL_GROWTH_RECORDS } from './data/sampleGrowthRecords';
@@ -49,6 +50,10 @@ import {
   calculateVacationDuration,
   calculateVacationSummary,
 } from './utils/vacationUtils';
+import {
+  loadSeasonalClimateZone,
+  saveSeasonalClimateZone,
+} from './utils/seasonalCareEngine';
 
 const STORAGE_KEY = 'sproutcare_plants_data_v1';
 const VACATION_STORAGE_KEY = 'sproutcare_vacation_config_v1';
@@ -120,6 +125,15 @@ export default function App() {
 
   // Health assessment records state with persistent storage
   const [healthAssessments, setHealthAssessments] = useState<HealthAssessment[]>(() => loadAllHealthAssessments());
+
+  // Indian Seasonal Plant Care climate zone preference
+  const [seasonalClimateZone, setSeasonalClimateZone] = useState<KarnatakaClimateZoneId>(() =>
+    loadSeasonalClimateZone()
+  );
+
+  useEffect(() => {
+    saveSeasonalClimateZone(seasonalClimateZone);
+  }, [seasonalClimateZone]);
 
   // Sync plants to local storage
   useEffect(() => {
@@ -494,7 +508,7 @@ export default function App() {
   }, [plants, vacationConfig, isVacationModeActive]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-stone-50/50 text-stone-800">
+    <div className="min-h-screen flex flex-col bg-stone-50/70 text-stone-800 overflow-x-clip">
       {/* Navigation */}
       <Navbar
         activeTab={activeTab}
@@ -509,7 +523,7 @@ export default function App() {
       />
 
       {/* Main Viewport Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 pb-28 md:pb-16">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 pb-24 md:pb-14">
         {/* Active Vacation Banner */}
         {isVacationModeActive && vacationConfig && (
           <div className="mb-6 sm:mb-8 p-4 sm:p-5 bg-gradient-to-r from-amber-50/90 via-emerald-50/70 to-emerald-50/90 border border-amber-200/90 rounded-2xl shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 animate-in fade-in duration-200">
@@ -567,6 +581,8 @@ export default function App() {
             onOpenDiagnosis={setDiagnosingPlant}
             achievements={currentAchievements}
             onOpenAchievements={() => setIsAchievementsModalOpen(true)}
+            climateZone={seasonalClimateZone}
+            onChangeClimateZone={setSeasonalClimateZone}
           />
         )}
 
@@ -604,6 +620,7 @@ export default function App() {
             onLogCare={handleLogCare}
             onSnoozeCare={handleSnoozeCare}
             onOpenPlantDetail={setSelectedPlant}
+            climateZone={seasonalClimateZone}
           />
         )}
       </main>
@@ -619,6 +636,7 @@ export default function App() {
         allGrowthRecords={growthRecords}
         onOpenHealthAssessment={setAssessingPlant}
         onOpenDiagnosis={setDiagnosingPlant}
+        climateZone={seasonalClimateZone}
       />
 
       {/* Health Assessment Observation Modal */}

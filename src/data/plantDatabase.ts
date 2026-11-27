@@ -1,10 +1,30 @@
 import { LightRequirement, Plant } from '../types/plant';
 
+export type PlantCategory =
+  | 'Indoor'
+  | 'Flowering'
+  | 'Vegetable'
+  | 'Fruit'
+  | 'Medicinal & Traditional';
+
+export const PLANT_CATEGORIES: PlantCategory[] = [
+  'Indoor',
+  'Flowering',
+  'Vegetable',
+  'Fruit',
+  'Medicinal & Traditional',
+];
+
 export interface PlantCatalogItem {
   id: string;
   name: string;
-  species: string;
+  kannadaName?: string;
+  kannadaTransliteration?: string;
+  species?: string;
   commonAliases?: string[];
+  category: PlantCategory;
+  soilType: string;
+  wateringGuide?: string;
   imageUrl: string;
   light: LightRequirement;
   wateringDays: number;
@@ -17,11 +37,16 @@ export interface PlantCatalogItem {
 }
 
 export const PLANT_DATABASE: PlantCatalogItem[] = [
+  // =========================================================================
+  // EXISTING HOUSEPLANT & WESTERN GARDEN COLLECTION (PRESERVED INTACT)
+  // =========================================================================
   {
     id: 'tulip',
     name: 'Tulip',
     species: 'Tulipa gesneriana',
-    commonAliases: ['Garden Tulip', 'Didier\'s Tulip'],
+    commonAliases: ['Garden Tulip', "Didier's Tulip"],
+    category: 'Flowering',
+    soilType: 'Loose, sandy, well-draining potting soil with compost',
     imageUrl: '/images/plants/tulip.jpg',
     light: 'Direct sunlight',
     wateringDays: 5,
@@ -29,7 +54,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'generic',
     roomDefault: 'Balcony Room',
-    careNotes: 'Prefers cool temperatures, well-draining soil, and ample sunlight. Allow top inch of soil to dry between waterings. Deadhead spent blossoms to conserve bulb energy.',
+    careNotes:
+      'Prefers cool temperatures, well-draining soil, and ample sunlight. Allow top inch of soil to dry between waterings. Deadhead spent blossoms to conserve bulb energy.',
     difficulty: 'Moderate',
   },
   {
@@ -37,6 +63,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Monstera Deliciosa',
     species: 'Monstera deliciosa',
     commonAliases: ['Swiss Cheese Plant', 'Split-Leaf Philodendron'],
+    category: 'Indoor',
+    soilType: 'Chunky, well-draining aroid mix (cocopeat, perlite, bark, and compost)',
     imageUrl: '/images/plants/monstera.jpg',
     light: 'Bright indirect',
     wateringDays: 7,
@@ -44,14 +72,20 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'monstera',
     roomDefault: 'Living Room',
-    careNotes: 'Likes high ambient humidity and bright indirect light. Wipe large fenestrated leaves monthly with a damp cloth to encourage photosynthesis.',
+    careNotes:
+      'Likes high ambient humidity and bright indirect light. Wipe large fenestrated leaves monthly with a damp cloth to encourage photosynthesis.',
     difficulty: 'Easy',
   },
   {
     id: 'golden-pothos',
     name: 'Golden Pothos',
+    kannadaName: 'ಮನಿ ಪ್ಲಾಂಟ್',
+    kannadaTransliteration: 'Money Plant',
     species: 'Epipremnum aureum',
-    commonAliases: ['Devil\'s Ivy', 'Ceylon Creeper', 'Money Plant'],
+    commonAliases: ["Devil's Ivy", 'Ceylon Creeper', 'Money Plant', 'Mani Plant'],
+    category: 'Indoor',
+    soilType: 'Well-draining potting mix of garden soil, cocopeat, and vermicompost',
+    wateringGuide: 'Water when top 1–2 inches feel dry; thrives in water or soil',
     imageUrl: '/images/plants/pothos.jpg',
     light: 'Medium indirect',
     wateringDays: 7,
@@ -59,14 +93,20 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'pothos',
     roomDefault: 'Kitchen',
-    careNotes: 'Fast-growing trailing vine. Tolerant of low light and occasional missed waterings. Trim vine tips regularly to promote full, bushier foliage.',
+    careNotes:
+      'Fast-growing trailing vine popular across Indian homes. Tolerant of low light and occasional missed waterings. Trim vine tips regularly to promote full, bushier foliage.',
     difficulty: 'Easy',
   },
   {
     id: 'snake-plant',
     name: 'Snake Plant',
+    kannadaName: 'ಹಾವಿನ ಗಿಡ',
+    kannadaTransliteration: 'Havina Gida',
     species: 'Sansevieria trifasciata',
-    commonAliases: ['Mother-in-Law\'s Tongue', 'Dracaena trifasciata', 'Saint George\'s Sword'],
+    commonAliases: ["Mother-in-Law's Tongue", 'Dracaena trifasciata', "Saint George's Sword", 'Naga Gida'],
+    category: 'Indoor',
+    soilType: 'Fast-draining sandy succulent mix (red soil, coarse river sand, perlite)',
+    wateringGuide: 'Allow soil to dry fully between waterings; reduce during monsoon',
     imageUrl: '/images/plants/snake.jpg',
     light: 'Low light',
     wateringDays: 14,
@@ -74,14 +114,19 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 120,
     illustrationType: 'snake',
     roomDefault: 'Bedroom',
-    careNotes: 'Extremely resilient architectural houseplant. Allow soil to dry completely between waterings. Thrives in almost any lighting from low to bright direct.',
+    careNotes:
+      'Extremely resilient architectural houseplant. Allow soil to dry completely between waterings. Thrives in almost any lighting from low indoor light to bright verandahs.',
     difficulty: 'Easy',
   },
   {
     id: 'peace-lily',
     name: 'Peace Lily',
+    kannadaName: 'ಪೀಸ್ ಲಿಲಿ',
+    kannadaTransliteration: 'Peace Lily',
     species: 'Spathiphyllum wallisii',
     commonAliases: ['White Sails', 'Spathe Flower'],
+    category: 'Indoor',
+    soilType: 'Moist, humus-rich mix of cocopeat, garden loam, and vermicompost',
     imageUrl: '/images/plants/peacelily.jpg',
     light: 'Medium indirect',
     wateringDays: 5,
@@ -89,7 +134,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 45,
     illustrationType: 'peacelily',
     roomDefault: 'Home Office',
-    careNotes: 'Graceful white blooms and glossy leaves. Droops slightly when thirsty as a gentle reminder. Keep away from harsh direct sun and drafty air vents.',
+    careNotes:
+      'Graceful white blooms and glossy leaves. Droops slightly when thirsty as a gentle reminder. Keep away from harsh direct afternoon sun and drafty air vents.',
     difficulty: 'Moderate',
   },
   {
@@ -97,6 +143,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Fiddle Leaf Fig',
     species: 'Ficus lyrata',
     commonAliases: ['Fiddle-Leaf Ficus', 'Banjo Fig'],
+    category: 'Indoor',
+    soilType: 'Well-aerated loamy potting mix with perlite and bark',
     imageUrl: '/images/plants/fig.jpg',
     light: 'Bright indirect',
     wateringDays: 10,
@@ -104,7 +152,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 90,
     illustrationType: 'fig',
     roomDefault: 'Balcony Room',
-    careNotes: 'Needs consistent bright filtered light. Allow top 2 inches of soil to dry before watering. Sensitive to being moved or cold air drafts.',
+    careNotes:
+      'Needs consistent bright filtered light. Allow top 2 inches of soil to dry before watering. Sensitive to being moved or cold air drafts.',
     difficulty: 'Demanding',
   },
   {
@@ -112,6 +161,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Calathea Orbifolia',
     species: 'Goeppertia orbifolia',
     commonAliases: ['Prayer Plant', 'Orbifolia'],
+    category: 'Indoor',
+    soilType: 'Moisture-retentive yet airy cocopeat, leaf mold, and perlite mix',
     imageUrl: '/images/plants/calathea.jpg',
     light: 'Medium indirect',
     wateringDays: 4,
@@ -119,14 +170,19 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'calathea',
     roomDefault: 'Bathroom',
-    careNotes: 'Striking round leaves with silver stripes. Requires high humidity and distilled or rainwater. Avoid direct sunlight which can scorch its leaves.',
+    careNotes:
+      'Striking round leaves with silver stripes. Requires high humidity and distilled or rainwater. Avoid direct sunlight which can scorch its leaves.',
     difficulty: 'Demanding',
   },
   {
     id: 'jade-plant',
     name: 'Jade Plant',
+    kannadaName: 'ಜೇಡ್ ಗಿಡ',
+    kannadaTransliteration: 'Jade Gida',
     species: 'Crassula ovata',
-    commonAliases: ['Money Tree', 'Lucky Plant', 'Dollar Plant'],
+    commonAliases: ['Money Tree', 'Lucky Plant', 'Dollar Plant', 'Kuberakshi'],
+    category: 'Indoor',
+    soilType: 'Porous succulent mix with coarse sand, red soil, and minimal cocopeat',
     imageUrl: '/images/plants/succulent.jpg',
     light: 'Direct sunlight',
     wateringDays: 14,
@@ -134,7 +190,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 90,
     illustrationType: 'succulent',
     roomDefault: 'Living Room',
-    careNotes: 'Glossy jade-green fleshy succulent leaves. Enjoys direct sunlight and porous, well-draining succulent potting mix. Water thoroughly only when dry.',
+    careNotes:
+      'Glossy jade-green fleshy succulent leaves. Enjoys bright morning sunlight and porous, well-draining succulent potting mix. Water thoroughly only when dry.',
     difficulty: 'Easy',
   },
   {
@@ -142,6 +199,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'ZZ Plant',
     species: 'Zamioculcas zamiifolia',
     commonAliases: ['Zanzibar Gem', 'Eternity Plant'],
+    category: 'Indoor',
+    soilType: 'Fast-draining sandy potting mix with perlite and light compost',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Low light',
     wateringDays: 18,
@@ -149,7 +208,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 120,
     illustrationType: 'generic',
     roomDefault: 'Hallway',
-    careNotes: 'Near indestructible with waxy, upright leaves. Stores water in bulb-like rhizomes. Tolerates low light, drought, and neglect exceptionally well.',
+    careNotes:
+      'Near indestructible with waxy, upright leaves. Stores water in bulb-like rhizomes. Tolerates low light, drought, and neglect exceptionally well.',
     difficulty: 'Easy',
   },
   {
@@ -157,6 +217,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Spider Plant',
     species: 'Chlorophytum comosum',
     commonAliases: ['Airplane Plant', 'Ribbon Plant', 'Spider Ivy'],
+    category: 'Indoor',
+    soilType: 'Light, well-draining mix of garden loam, cocopeat, and compost',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Bright indirect',
     wateringDays: 6,
@@ -164,14 +226,19 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'generic',
     roomDefault: 'Bedroom',
-    careNotes: 'Produces charming arching baby spiderettes. Prefers evenly moist soil and bright indirect sunlight. Non-toxic and safe for curious cats and dogs.',
+    careNotes:
+      'Produces charming arching baby spiderettes. Prefers evenly moist soil and bright indirect sunlight. Non-toxic and safe for curious cats and dogs.',
     difficulty: 'Easy',
   },
   {
     id: 'rubber-tree',
     name: 'Rubber Tree',
+    kannadaName: 'ರಬ್ಬರ್ ಗಿಡ',
+    kannadaTransliteration: 'Rubber Gida',
     species: 'Ficus elastica',
     commonAliases: ['Rubber Plant', 'India Rubber Fig'],
+    category: 'Indoor',
+    soilType: 'Rich, porous red loam with cocopeat, perlite, and vermicompost',
     imageUrl: '/images/plants/fig.jpg',
     light: 'Bright indirect',
     wateringDays: 8,
@@ -179,7 +246,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 90,
     illustrationType: 'fig',
     roomDefault: 'Living Room',
-    careNotes: 'Thick leathery dark burgundy-green leaves. Water when top half of soil feels dry. Wipe leaves occasionally to remove dust and maintain shine.',
+    careNotes:
+      'Thick leathery dark burgundy-green leaves. Water when top half of soil feels dry. Wipe leaves occasionally to remove dust and maintain shine.',
     difficulty: 'Moderate',
   },
   {
@@ -187,6 +255,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Boston Fern',
     species: 'Nephrolepis exaltata',
     commonAliases: ['Sword Fern', 'Fishbone Fern'],
+    category: 'Indoor',
+    soilType: 'Humus-rich, moist cocopeat and compost potting mix',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Medium indirect',
     wateringDays: 4,
@@ -194,22 +264,29 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 45,
     illustrationType: 'generic',
     roomDefault: 'Bathroom',
-    careNotes: 'Lush feathery fronds. Craves consistently moist soil and elevated ambient humidity. Perfect specimen for hanging baskets in bright bathrooms.',
+    careNotes:
+      'Lush feathery fronds. Craves consistently moist soil and elevated ambient humidity. Perfect specimen for hanging baskets in bright bathrooms or shaded verandahs.',
     difficulty: 'Moderate',
   },
   {
     id: 'aloe-vera',
     name: 'Aloe Vera',
+    kannadaName: 'ಲೋಳೆಸರ',
+    kannadaTransliteration: 'Lolesara',
     species: 'Aloe barbadensis miller',
-    commonAliases: ['Burn Plant', 'Miracle Plant'],
+    commonAliases: ['Burn Plant', 'Miracle Plant', 'Ghritkumari', 'Kumari', 'Lolesara Gida'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Fast-draining sandy succulent mix (red garden soil, coarse sand, and light compost)',
+    wateringGuide: 'Deeply water every 10–14 days once soil is dry; avoid monsoon waterlogging',
     imageUrl: '/images/plants/succulent.jpg',
     light: 'Direct sunlight',
-    wateringDays: 16,
+    wateringDays: 14,
     fertilizingDays: 60,
     pruningDays: 120,
     illustrationType: 'succulent',
-    roomDefault: 'Kitchen',
-    careNotes: 'Medicinal gel-filled succulent foliage. Allow soil to dry completely between waterings. Needs 6+ hours of bright direct or filtered sunlight.',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Widely grown medicinal succulent in Karnataka homes for soothing skin and hair gel. Allow soil to dry completely between waterings and provide 5–6 hours of sunlight.',
     difficulty: 'Easy',
   },
   {
@@ -217,6 +294,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'String of Pearls',
     species: 'Senecio rowleyanus',
     commonAliases: ['String of Beads', 'Rosary Vine'],
+    category: 'Indoor',
+    soilType: 'Gritty cactus and succulent potting mix with coarse sand and perlite',
     imageUrl: '/images/plants/succulent.jpg',
     light: 'Bright indirect',
     wateringDays: 12,
@@ -224,7 +303,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 90,
     illustrationType: 'succulent',
     roomDefault: 'Home Office',
-    careNotes: 'Trailing succulent with spherical bead-like leaves. Water sparingly when beads slightly soften. Sensitive to overwatering and crown rot.',
+    careNotes:
+      'Trailing succulent with spherical bead-like leaves. Water sparingly when beads slightly soften. Sensitive to overwatering and crown rot.',
     difficulty: 'Moderate',
   },
   {
@@ -232,6 +312,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Bird of Paradise',
     species: 'Strelitzia reginae',
     commonAliases: ['Crane Flower', 'Strelitzia'],
+    category: 'Flowering',
+    soilType: 'Rich, well-draining loamy soil enriched with organic compost',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Direct sunlight',
     wateringDays: 7,
@@ -239,7 +321,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'generic',
     roomDefault: 'Living Room',
-    careNotes: 'Dramatic tropical paddle leaves with occasional exotic orange and blue flowers. Enjoys bright sunny exposures and generous regular hydration.',
+    careNotes:
+      'Dramatic tropical paddle leaves with occasional exotic orange and blue flowers. Enjoys bright sunny exposures and generous regular hydration.',
     difficulty: 'Moderate',
   },
   {
@@ -247,6 +330,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Chinese Money Plant',
     species: 'Pilea peperomioides',
     commonAliases: ['Pancake Plant', 'UFO Plant', 'Missionary Plant'],
+    category: 'Indoor',
+    soilType: 'Light, fast-draining potting mix with perlite and cocopeat',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Bright indirect',
     wateringDays: 6,
@@ -254,7 +339,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'generic',
     roomDefault: 'Home Office',
-    careNotes: 'Distinctive round coin-shaped leaves that naturally rotate toward light. Water when the top inch of soil is dry. Easily propagates baby pups.',
+    careNotes:
+      'Distinctive round coin-shaped leaves that naturally rotate toward light. Water when the top inch of soil is dry. Easily propagates baby pups.',
     difficulty: 'Easy',
   },
   {
@@ -262,6 +348,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'English Ivy',
     species: 'Hedera helix',
     commonAliases: ['Common Ivy', 'European Ivy'],
+    category: 'Indoor',
+    soilType: 'Fertile, slightly moist well-draining potting mix',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Medium indirect',
     wateringDays: 6,
@@ -269,7 +357,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 45,
     illustrationType: 'generic',
     roomDefault: 'Balcony Room',
-    careNotes: 'Classic trailing or climbing evergreen vine. Prefers cooler conditions and slightly moist soil. Check regularly for spider mites in dry environments.',
+    careNotes:
+      'Classic trailing or climbing evergreen vine. Prefers cooler conditions and slightly moist soil. Check regularly for spider mites in dry environments.',
     difficulty: 'Easy',
   },
   {
@@ -277,6 +366,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Heartleaf Philodendron',
     species: 'Philodendron hederaceum',
     commonAliases: ['Sweetheart Plant'],
+    category: 'Indoor',
+    soilType: 'Airy mix of cocopeat, perlite, and vermicompost',
     imageUrl: '/images/plants/pothos.jpg',
     light: 'Medium indirect',
     wateringDays: 7,
@@ -284,7 +375,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'pothos',
     roomDefault: 'Bedroom',
-    careNotes: 'Charming heart-shaped deep green leaves. Tolerates low light environments well. Water when the top inch of potting mix dries out.',
+    careNotes:
+      'Charming heart-shaped deep green leaves. Tolerates low light environments well. Water when the top inch of potting mix dries out.',
     difficulty: 'Easy',
   },
   {
@@ -292,6 +384,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Lavender',
     species: 'Lavandula angustifolia',
     commonAliases: ['English Lavender', 'True Lavender'],
+    category: 'Flowering',
+    soilType: 'Gritty, lean, fast-draining sandy soil',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Direct sunlight',
     wateringDays: 8,
@@ -299,7 +393,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'generic',
     roomDefault: 'Balcony Room',
-    careNotes: 'Fragrant purple flower spikes and silvery foliage. Craves full direct sunshine and gritty, lean, well-draining soil. Do not overwater.',
+    careNotes:
+      'Fragrant purple flower spikes and silvery foliage. Craves full direct sunshine and gritty, lean, well-draining soil. Do not overwater.',
     difficulty: 'Moderate',
   },
   {
@@ -307,14 +402,17 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Moth Orchid',
     species: 'Phalaenopsis amabilis',
     commonAliases: ['Phalaenopsis Orchid', 'Moon Orchid'],
-    imageUrl: '/images/plants/generic.jpg',
+    category: 'Flowering',
+    soilType: 'Chunky orchid bark, charcoal, and sphagnum moss (no regular garden soil)',
+    imageUrl: '/images/plants/peacelily.jpg',
     light: 'Medium indirect',
     wateringDays: 8,
     fertilizingDays: 21,
     pruningDays: 90,
     illustrationType: 'peacelily',
     roomDefault: 'Living Room',
-    careNotes: 'Long-lasting blooms on arching sprays. Planted in chunky bark or sphagnum moss. Water by soaking root zone thoroughly, allowing full drainage.',
+    careNotes:
+      'Long-lasting blooms on arching sprays. Planted in chunky bark or sphagnum moss. Water by soaking root zone thoroughly, allowing full drainage.',
     difficulty: 'Moderate',
   },
   {
@@ -322,6 +420,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Rosemary',
     species: 'Salvia rosmarinus',
     commonAliases: ['Anthos', 'Dew of the Sea'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Fast-draining sandy loam with coarse river sand',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Direct sunlight',
     wateringDays: 7,
@@ -329,37 +429,46 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 45,
     illustrationType: 'generic',
     roomDefault: 'Kitchen',
-    careNotes: 'Aromatic culinary needle evergreen. Requires at least 6 hours of full direct sunlight and sharp drainage. Allow topsoil to dry between waterings.',
+    careNotes:
+      'Aromatic culinary needle evergreen. Requires at least 6 hours of full direct sunlight and sharp drainage. Allow topsoil to dry between waterings.',
     difficulty: 'Moderate',
   },
   {
     id: 'sweet-basil',
     name: 'Sweet Basil',
+    kannadaName: 'ಕಾಮಕಸ್ತೂರಿ',
+    kannadaTransliteration: 'Kamakasturi',
     species: 'Ocimum basilicum',
-    commonAliases: ['Genovese Basil', 'Great Basil'],
-    imageUrl: '/images/plants/generic.jpg',
+    commonAliases: ['Genovese Basil', 'Great Basil', 'Sabja', 'Italian Basil'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Fertile, moist well-draining red loam with vermicompost',
+    imageUrl: '/images/plants/tulsi.jpg',
     light: 'Direct sunlight',
     wateringDays: 3,
     fertilizingDays: 14,
     pruningDays: 21,
     illustrationType: 'generic',
     roomDefault: 'Kitchen',
-    careNotes: 'Popular aromatic herb. Demands warm sunny windowsills and consistently moist soil. Pinch off flower buds continuously to prolong tender leaf harvests.',
+    careNotes:
+      'Popular aromatic culinary herb. Demands warm sunny windowsills and consistently moist soil. Pinch off flower buds continuously to prolong tender leaf harvests.',
     difficulty: 'Moderate',
   },
   {
     id: 'anthurium',
     name: 'Anthurium',
     species: 'Anthurium andraeanum',
-    commonAliases: ['Flamingo Flower', 'Tailflower', 'Painter\'s Palette'],
-    imageUrl: '/images/plants/generic.jpg',
+    commonAliases: ['Flamingo Flower', 'Tailflower', "Painter's Palette"],
+    category: 'Flowering',
+    soilType: 'Coarse, airy cocopeat chips, bark, and perlite mix',
+    imageUrl: '/images/plants/peacelily.jpg',
     light: 'Bright indirect',
     wateringDays: 6,
     fertilizingDays: 21,
     pruningDays: 60,
     illustrationType: 'peacelily',
     roomDefault: 'Living Room',
-    careNotes: 'Heart-shaped spathes in vibrant red or pink. Enjoys warm room temperatures and moderate humidity. Water when top inch of soil feels dry.',
+    careNotes:
+      'Heart-shaped spathes in vibrant red or pink. Enjoys warm humid climates like coastal and southern Karnataka. Water when top inch of mix feels dry.',
     difficulty: 'Moderate',
   },
   {
@@ -367,6 +476,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Cast Iron Plant',
     species: 'Aspidistra elatior',
     commonAliases: ['Bar-Room Plant', 'Iron Plant'],
+    category: 'Indoor',
+    soilType: 'Well-draining loamy garden soil with light compost',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Low light',
     wateringDays: 12,
@@ -374,7 +485,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 90,
     illustrationType: 'generic',
     roomDefault: 'Hallway',
-    careNotes: 'Legendary for surviving extreme neglect, low light, temperature fluctuations, and missed waterings. Wipe leaves occasionally to keep dust-free.',
+    careNotes:
+      'Legendary for surviving extreme neglect, low light, temperature fluctuations, and missed waterings. Wipe leaves occasionally to keep dust-free.',
     difficulty: 'Easy',
   },
   {
@@ -382,6 +494,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Dragon Tree',
     species: 'Dracaena marginata',
     commonAliases: ['Madagascar Dragon Tree', 'Red-Edge Dracaena'],
+    category: 'Indoor',
+    soilType: 'Loose, well-draining potting mix with sand and compost',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Medium indirect',
     wateringDays: 10,
@@ -389,14 +503,17 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 90,
     illustrationType: 'generic',
     roomDefault: 'Living Room',
-    careNotes: 'Slender arching leaves edged with vivid red. Water when top 50% of potting soil is dry. Sensitive to fluoride and salts in tap water.',
+    careNotes:
+      'Slender arching leaves edged with vivid red. Water when top 50% of potting soil is dry. Sensitive to fluoride and salts in tap water.',
     difficulty: 'Easy',
   },
   {
     id: 'swiss-cheese-vine',
     name: 'Swiss Cheese Vine',
     species: 'Monstera adansonii',
-    commonAliases: ['Adanson\'s Monstera', 'Monkey Mask'],
+    commonAliases: ["Adanson's Monstera", 'Monkey Mask'],
+    category: 'Indoor',
+    soilType: 'Airy aroid mix with cocopeat, bark, and perlite',
     imageUrl: '/images/plants/monstera.jpg',
     light: 'Bright indirect',
     wateringDays: 6,
@@ -404,7 +521,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 45,
     illustrationType: 'monstera',
     roomDefault: 'Home Office',
-    careNotes: 'Smaller trailing cousin of Monstera deliciosa with elliptical holes inside the leaves. Prefers moderate humidity and support pole to climb.',
+    careNotes:
+      'Smaller trailing cousin of Monstera deliciosa with elliptical holes inside the leaves. Prefers moderate humidity and a moss pole to climb.',
     difficulty: 'Easy',
   },
   {
@@ -412,6 +530,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'African Violet',
     species: 'Saintpaulia ionantha',
     commonAliases: ['Saintpaulia'],
+    category: 'Flowering',
+    soilType: 'Light, fluffy peat/cocopeat and perlite potting mix',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Bright indirect',
     wateringDays: 5,
@@ -419,7 +539,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 45,
     illustrationType: 'generic',
     roomDefault: 'Bedroom',
-    careNotes: 'Soft fuzzy leaves and year-round jewel-tone blooms. Water from below using room-temperature water to prevent spotting on fuzzy leaves.',
+    careNotes:
+      'Soft fuzzy leaves and year-round jewel-tone blooms. Water from below using room-temperature water to prevent spotting on fuzzy leaves.',
     difficulty: 'Moderate',
   },
   {
@@ -427,6 +548,8 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     name: 'Polka Dot Begonia',
     species: 'Begonia maculata',
     commonAliases: ['Spotted Begonia', 'Trout Begonia'],
+    category: 'Indoor',
+    soilType: 'Well-draining, humus-rich cocopeat and perlite mix',
     imageUrl: '/images/plants/generic.jpg',
     light: 'Bright indirect',
     wateringDays: 5,
@@ -434,45 +557,971 @@ export const PLANT_DATABASE: PlantCatalogItem[] = [
     pruningDays: 60,
     illustrationType: 'generic',
     roomDefault: 'Living Room',
-    careNotes: 'Dramatic wing-shaped leaves speckled with silver polka dots and red undersides. Keep soil lightly moist and provide generous filtered sunlight.',
+    careNotes:
+      'Dramatic wing-shaped leaves speckled with silver polka dots and red undersides. Keep soil lightly moist and provide generous filtered sunlight.',
     difficulty: 'Moderate',
+  },
+
+  // =========================================================================
+  // INDIAN & KARNATAKA INDOOR PLANTS
+  // =========================================================================
+  {
+    id: 'areca-palm',
+    name: 'Areca Palm',
+    kannadaName: 'ಅರೆಕಾ ಪಾಮ್',
+    kannadaTransliteration: 'Areca Palm',
+    species: 'Dypsis lutescens',
+    commonAliases: ['Butterfly Palm', 'Golden Cane Palm', 'Yellow Palm', 'Adike Alankarika Gida'],
+    category: 'Indoor',
+    soilType: 'Well-draining sandy red loam mixed with cocopeat and vermicompost',
+    wateringGuide: 'Water every 3–4 days in Indian summer; keep lightly moist without soggy roots',
+    imageUrl: '/images/plants/generic.jpg',
+    light: 'Bright indirect',
+    wateringDays: 4,
+    fertilizingDays: 30,
+    pruningDays: 60,
+    illustrationType: 'generic',
+    roomDefault: 'Living Room',
+    careNotes:
+      'One of India’s favorite natural air-purifying indoor palms. Thrives in bright filtered verandah or living room light. Mist fronds during dry summer heat.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'croton',
+    name: 'Croton',
+    kannadaName: 'ಕ್ರೋಟನ್ ಗಿಡ',
+    kannadaTransliteration: 'Croton Gida',
+    species: 'Codiaeum variegatum',
+    commonAliases: ['Garden Croton', 'Variegated Croton', 'Petra Croton'],
+    category: 'Indoor',
+    soilType: 'Rich, porous red garden soil blended with cocopeat and vermicompost',
+    wateringGuide: 'Water when top inch feels dry; loves warm Karnataka humidity',
+    imageUrl: '/images/plants/generic.jpg',
+    light: 'Bright indirect',
+    wateringDays: 4,
+    fertilizingDays: 30,
+    pruningDays: 60,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Vibrant red, yellow, and green patterned foliage common in Bengaluru and Mysuru balconies. Bright light keeps leaf colors vivid; avoid sudden cold drafts.',
+    difficulty: 'Moderate',
+  },
+  {
+    id: 'lucky-bamboo',
+    name: 'Lucky Bamboo',
+    kannadaName: 'ಲಕ್ಕಿ ಬ್ಯಾಂಬೂ',
+    kannadaTransliteration: 'Lucky Bamboo',
+    species: 'Dracaena sanderiana',
+    commonAliases: ['Adrushtada Bidiru', 'Ribbon Dracaena', 'Feng Shui Bamboo'],
+    category: 'Indoor',
+    soilType: 'Clean filtered water with pebbles, or light cocopeat-perlite potting mix',
+    wateringGuide: 'Change water every 5–7 days using filtered or RO water (avoid chlorinated tap water)',
+    imageUrl: '/images/plants/generic.jpg',
+    light: 'Medium indirect',
+    wateringDays: 5,
+    fertilizingDays: 45,
+    pruningDays: 90,
+    illustrationType: 'generic',
+    roomDefault: 'Home Office',
+    careNotes:
+      'Popular tabletop and desk plant across Indian homes and offices. Keep out of harsh direct sunlight to prevent yellowing stalks.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'syngonium',
+    name: 'Syngonium (Arrowhead Plant)',
+    kannadaName: 'ಸಿಂಗೋನಿಯಂ',
+    kannadaTransliteration: 'Syngonium',
+    species: 'Syngonium podophyllum',
+    commonAliases: ['Arrowhead Vine', 'Goosefoot Plant', 'Pink Syngonium'],
+    category: 'Indoor',
+    soilType: 'Light, well-draining mix of red soil, cocopeat, and vermicompost',
+    wateringGuide: 'Water every 4–5 days when topsoil dries slightly; tolerates humid monsoons well',
+    imageUrl: '/images/plants/pothos.jpg',
+    light: 'Medium indirect',
+    wateringDays: 5,
+    fertilizingDays: 30,
+    pruningDays: 45,
+    illustrationType: 'pothos',
+    roomDefault: 'Living Room',
+    careNotes:
+      'Low-maintenance indoor foliage plant that grows compactly in pots or trails elegantly on a moss stick. Easy to propagate in water.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'aglaonema',
+    name: 'Aglaonema (Chinese Evergreen)',
+    kannadaName: 'ಅಗ್ಲೋನೆಮಾ',
+    kannadaTransliteration: 'Aglaonema',
+    species: 'Aglaonema commutatum',
+    commonAliases: ['Chinese Evergreen', 'Lipstick Aglaonema', 'Snow White Aglaonema'],
+    category: 'Indoor',
+    soilType: 'Loose, fast-draining cocopeat, perlite, and leaf mold mix',
+    wateringGuide: 'Water once top 2 inches dry out; sensitive to overwatering in winter',
+    imageUrl: '/images/plants/calathea.jpg',
+    light: 'Low light',
+    wateringDays: 7,
+    fertilizingDays: 30,
+    pruningDays: 90,
+    illustrationType: 'calathea',
+    roomDefault: 'Bedroom',
+    careNotes:
+      'Hardy colorful indoor plant ideal for Indian apartments with limited direct sun. Wiping leaves regularly keeps foliage bright and pest-free.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'betel-leaf',
+    name: 'Betel Leaf (Paan)',
+    kannadaName: 'ವೀಳ್ಯದೆಲೆ',
+    kannadaTransliteration: 'Veelyadele',
+    species: 'Piper betle',
+    commonAliases: ['Paan', 'Nagavalli', 'Betel Vine', 'Mysuru Veelyadele', 'Tambula'],
+    category: 'Indoor',
+    soilType: 'Humus-rich, moist red loamy soil with cocopeat and aged cow dung compost',
+    wateringGuide: 'Keep soil consistently moist; mist leaves in hot dry weather',
+    imageUrl: '/images/plants/pothos.jpg',
+    light: 'Medium indirect',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 45,
+    illustrationType: 'pothos',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Auspicious climbing vine cherished in Karnataka households (including famous Mysuru Veelyadele). Prefers dappled shade, warm humidity, and a moss pole or trellis.',
+    difficulty: 'Moderate',
+  },
+
+  // =========================================================================
+  // INDIAN & KARNATAKA FLOWERING PLANTS
+  // =========================================================================
+  {
+    id: 'hibiscus',
+    name: 'Hibiscus',
+    kannadaName: 'ದಾಸವಾಳ',
+    kannadaTransliteration: 'Dasavala',
+    species: 'Hibiscus rosa-sinensis',
+    commonAliases: ['Shoe Flower', 'Gudhal', 'Chembarathi', 'China Rose', 'Red Hibiscus'],
+    category: 'Flowering',
+    soilType: 'Fertile red garden soil mixed with vermicompost, cocopeat, and river sand',
+    wateringGuide: 'Water thoroughly every 1–2 days in summer; ensure good pot drainage during monsoon',
+    imageUrl: '/images/plants/hibiscus.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 15,
+    pruningDays: 45,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Iconic year-round blooming shrub in Indian gardens and pooja offerings. Needs 5–6 hours of direct sun, potassium-rich organic fertilizer (like banana peel tea), and neem oil spray for mealybugs.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'arabian-jasmine',
+    name: 'Arabian Jasmine (Mogra)',
+    kannadaName: 'ಮಲ್ಲಿಗೆ',
+    kannadaTransliteration: 'Mallige',
+    species: 'Jasminum sambac',
+    commonAliases: ['Mysore Mallige', 'Udupi Mallige', 'Gundu Mallige', 'Mogra', 'Jasmine', 'Madurai Malli'],
+    category: 'Flowering',
+    soilType: 'Well-draining fertile red loamy soil enriched with aged compost and bonemeal',
+    wateringGuide: 'Water every 2 days during summer flowering; reduce slightly in cool winter',
+    imageUrl: '/images/plants/jasmine.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 15,
+    pruningDays: 45,
+    illustrationType: 'peacelily',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Beloved across Karnataka (Mysore Mallige & Udupi Mallige) for its intoxicating evening fragrance. Prune lightly after each flowering flush and provide full sun for abundant buds.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'marigold',
+    name: 'Marigold',
+    kannadaName: 'ಚೆಂಡು ಹೂವು',
+    kannadaTransliteration: 'Chendu Hoovu',
+    species: 'Tagetes erecta',
+    commonAliases: ['Genda', 'African Marigold', 'French Marigold', 'Chandu Hoovu'],
+    category: 'Flowering',
+    soilType: 'Well-draining red loamy soil with vermicompost',
+    wateringGuide: 'Water at base of plant every 2 days; avoid wetting flowers to prevent mildew',
+    imageUrl: '/images/plants/hibiscus.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 30,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Festive golden-orange blooms essential for Indian festivals and a great natural pest-repellent companion for vegetable pots. Pinch young tips for bushier flowering.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'indian-rose',
+    name: 'Indian Rose (Desi Rose)',
+    kannadaName: 'ಗುಲಾಬಿ',
+    kannadaTransliteration: 'Gulabi',
+    species: 'Rosa indica',
+    commonAliases: ['Desi Rose', 'Nati Gulabi', 'Paneer Rose', 'Button Rose', 'Rose'],
+    category: 'Flowering',
+    soilType: 'Rich red loamy soil with aged cow dung manure, cocopeat, and river sand',
+    wateringGuide: 'Water deeply every 2 days in the morning; avoid overhead watering in evenings',
+    imageUrl: '/images/plants/hibiscus.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 15,
+    pruningDays: 30,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Fragrant desi roses flourish in Karnataka’s moderate climate with 5–6 hours of direct sun. Deadhead spent blooms regularly and feed with vermicompost and neem cake.',
+    difficulty: 'Moderate',
+  },
+  {
+    id: 'chrysanthemum',
+    name: 'Chrysanthemum',
+    kannadaName: 'ಸೇವಂತಿಗೆ',
+    kannadaTransliteration: 'Sevantige',
+    species: 'Chrysanthemum morifolium',
+    commonAliases: ['Shevanti', 'Guldaudi', 'Mums', 'Sevanthi'],
+    category: 'Flowering',
+    soilType: 'Loose, fertile sandy loam with organic compost and cocopeat',
+    wateringGuide: 'Keep soil evenly moist; water every 2 days without waterlogging roots',
+    imageUrl: '/images/plants/jasmine.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 15,
+    pruningDays: 45,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Classic Karnataka festival flower blooming abundantly from autumn through winter. Pinch growing tips in monsoon months to encourage dense, multi-bud branches.',
+    difficulty: 'Moderate',
+  },
+  {
+    id: 'bougainvillea',
+    name: 'Bougainvillea',
+    kannadaName: 'ಕಾಗದದ ಹೂವು',
+    kannadaTransliteration: 'Kagadada Hoovu',
+    species: 'Bougainvillea spectabilis',
+    commonAliases: ['Paper Flower', 'Boganvilla'],
+    category: 'Flowering',
+    soilType: 'Gritty, fast-draining sandy red soil (thrives in lean soil)',
+    wateringGuide: 'Water sparingly every 4 days; slight dryness triggers heavy blooming',
+    imageUrl: '/images/plants/hibiscus.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 4,
+    fertilizingDays: 30,
+    pruningDays: 60,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Drought-hardy climber bursting with vibrant magenta, orange, or white papery bracts in full Indian sun. Overwatering encourages leaves at the expense of flowers.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'crossandra',
+    name: 'Crossandra (Firecracker Flower)',
+    kannadaName: 'ಕನಕಾಂಬರ',
+    kannadaTransliteration: 'Kanakambara',
+    species: 'Crossandra infundibuliformis',
+    commonAliases: ['Aboli', 'Kanakambaram', 'Firecracker Flower'],
+    category: 'Flowering',
+    soilType: 'Well-draining fertile red loam with organic compost and sand',
+    wateringGuide: 'Water every 2 days to keep soil lightly moist; thrives in warm South Indian weather',
+    imageUrl: '/images/plants/hibiscus.jpg',
+    light: 'Bright indirect',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 45,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Bright coral-orange flowers widely woven into garlands across Karnataka. Grows easily in pots with bright morning sun and afternoon dappled shade.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'periwinkle',
+    name: 'Periwinkle (Sadabahar)',
+    kannadaName: 'ನಿತ್ಯಪುಷ್ಪ',
+    kannadaTransliteration: 'Nityapushpa',
+    species: 'Catharanthus roseus',
+    commonAliases: ['Sadabahar', 'Vinca', 'Madagascar Periwinkle', 'Kashi Kanagalu'],
+    category: 'Flowering',
+    soilType: 'Light, sandy, fast-draining garden soil',
+    wateringGuide: 'Water every 3 days; very heat-tolerant and dislikes soggy monsoon pots',
+    imageUrl: '/images/plants/jasmine.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 3,
+    fertilizingDays: 30,
+    pruningDays: 60,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Effortless evergreen bloomer producing pink or white flowers year-round in Indian heat. Needs minimal fertilizer and thrives in sunny balconies or courtyards.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'champaca',
+    name: 'Champaca (Joy Perfume Tree)',
+    kannadaName: 'ಸಂಪಿಗೆ',
+    kannadaTransliteration: 'Sampige',
+    species: 'Magnolia champaca',
+    commonAliases: ['Champa', 'Sonchafa', 'Swarna Champa', 'Golden Champaca'],
+    category: 'Flowering',
+    soilType: 'Deep, fertile, slightly acidic red loamy soil enriched with leaf mold and compost',
+    wateringGuide: 'Water thoroughly every 2 days in summer; mulch base to retain moisture',
+    imageUrl: '/images/plants/jasmine.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 90,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Prized in Karnataka for its golden-yellow, intensely fragrant flowers. Grafted dwarf varieties grow wonderfully in large terrace containers with full sun.',
+    difficulty: 'Moderate',
+  },
+  {
+    id: 'parijata',
+    name: 'Night-Flowering Jasmine (Parijata)',
+    kannadaName: 'ಪಾರಿಜಾತ',
+    kannadaTransliteration: 'Parijata',
+    species: 'Nyctanthes arbor-tristis',
+    commonAliases: ['Harsingar', 'Coral Jasmine', 'Pavizhamalli', 'Parijat'],
+    category: 'Flowering',
+    soilType: 'Well-draining loamy red soil mixed with compost and river sand',
+    wateringGuide: 'Water every 2 days during summer; allow topsoil to dry slightly in winter',
+    imageUrl: '/images/plants/jasmine.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 60,
+    illustrationType: 'generic',
+    roomDefault: 'Courtyard / Outdoor',
+    careNotes:
+      'Sacred Indian garden shrub producing fragrant white flowers with bright orange tubes that bloom at night and fall gently at dawn. Prune after winter flowering.',
+    difficulty: 'Easy',
+  },
+
+  // =========================================================================
+  // INDIAN & KARNATAKA VEGETABLE PLANTS
+  // =========================================================================
+  {
+    id: 'tomato',
+    name: 'Tomato',
+    kannadaName: 'ಟೊಮೆಟೊ',
+    kannadaTransliteration: 'Tomato',
+    species: 'Solanum lycopersicum',
+    commonAliases: ['Nati Tomato', 'Cherry Tomato', 'Tamatar'],
+    category: 'Vegetable',
+    soilType: 'Deep, nutrient-rich red loamy soil with vermicompost, cocopeat, and neem cake',
+    wateringGuide: 'Water consistently every 2 days at soil level to prevent fruit cracking',
+    imageUrl: '/images/plants/vegetables.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 14,
+    pruningDays: 21,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Easy kitchen-garden favorite in 12–14 inch pots or grow bags. Provide 6 hours of sunlight, stake tall stems for support, and pinch lower suckers for heavier fruiting.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'green-chilli',
+    name: 'Green Chilli',
+    kannadaName: 'ಹಸಿರು ಮೆಣಸಿನಕಾಯಿ',
+    kannadaTransliteration: 'Hasiru Menasinakayi',
+    species: 'Capsicum annuum',
+    commonAliases: ['Menasinakayi', 'Chilli', 'Mirchi', 'Byadgi Chilli', 'Kanthari'],
+    category: 'Vegetable',
+    soilType: 'Loose, well-draining red loam mixed with vermicompost and neem cake',
+    wateringGuide: 'Water every 2 days; avoid waterlogging which causes leaf curl and flower drop',
+    imageUrl: '/images/plants/vegetables.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 15,
+    pruningDays: 30,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Produces abundant chillies year-round in sunny Karnataka balconies. Spray diluted buttermilk or neem oil periodically to prevent leaf-curl pests.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'brinjal',
+    name: 'Brinjal (Eggplant)',
+    kannadaName: 'ಬದನೆಕಾಯಿ',
+    kannadaTransliteration: 'Badanekayi',
+    species: 'Solanum melongena',
+    commonAliases: ['Eggplant', 'Baingan', 'Mattu Gulla', 'Udupi Badanekayi', 'Aubergine'],
+    category: 'Vegetable',
+    soilType: 'Fertile, well-draining sandy loam enriched with organic manure and neem cake',
+    wateringGuide: 'Water deeply every 2 days; consistent moisture prevents bitter fruit',
+    imageUrl: '/images/plants/vegetables.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 15,
+    pruningDays: 45,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Rewarding terrace vegetable thriving in warm Indian weather (including coastal Karnataka specialties like Mattu Gulla). Grow in 14+ inch pots with full sun.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'okra',
+    name: "Lady's Finger (Okra)",
+    kannadaName: 'ಬೆಂಡೆಕಾಯಿ',
+    kannadaTransliteration: 'Bendekayi',
+    species: 'Abelmoschus esculentus',
+    commonAliases: ['Bhindi', 'Okra', 'Lady Finger'],
+    category: 'Vegetable',
+    soilType: 'Rich, warm loamy soil with aged cow dung compost and good drainage',
+    wateringGuide: 'Water every 2 days in warm weather; loves Indian summer sun',
+    imageUrl: '/images/plants/vegetables.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 15,
+    pruningDays: 30,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Fast-growing summer and monsoon crop ready to harvest in ~50 days from seed. Harvest tender pods every 2 days to encourage continuous production.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'coriander',
+    name: 'Coriander',
+    kannadaName: 'ಕೊತ್ತಂಬರಿ ಸೊಪ್ಪು',
+    kannadaTransliteration: 'Kottambari Soppu',
+    species: 'Coriandrum sativum',
+    commonAliases: ['Kottambari', 'Cilantro', 'Dhaniya', 'Coriander Leaves'],
+    category: 'Vegetable',
+    soilType: 'Light, fine-textured mix of garden soil, cocopeat, and vermicompost',
+    wateringGuide: 'Mist or gently water every 1–2 days to keep shallow roots evenly moist',
+    imageUrl: '/images/plants/vegetables.jpg',
+    light: 'Bright indirect',
+    wateringDays: 2,
+    fertilizingDays: 20,
+    pruningDays: 15,
+    illustrationType: 'generic',
+    roomDefault: 'Kitchen',
+    careNotes:
+      'Everyday Indian kitchen staple easily grown in wide shallow trays. Lightly crush whole coriander seeds into halves before sowing and harvest outer leaves regularly.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'indian-spinach',
+    name: 'Indian Spinach (Palak)',
+    kannadaName: 'ಪಾಲಕ್ ಸೊಪ್ಪು',
+    kannadaTransliteration: 'Palak Soppu',
+    species: 'Spinacia oleracea',
+    commonAliases: ['Palak', 'Spinach', 'Basale Soppu', 'Leafy Greens'],
+    category: 'Vegetable',
+    soilType: 'Moist, nitrogen-rich loamy potting mix with generous vermicompost',
+    wateringGuide: 'Water every 2 days; keep soil cool and consistently moist',
+    imageUrl: '/images/plants/vegetables.jpg',
+    light: 'Bright indirect',
+    wateringDays: 2,
+    fertilizingDays: 15,
+    pruningDays: 20,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Nutritious leafy green ready for cut-and-come-again harvests within 30–35 days. Prefers bright morning sun with protection from harsh midday summer heat.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'curry-leaf',
+    name: 'Curry Leaf',
+    kannadaName: 'ಕರಿಬೇವು',
+    kannadaTransliteration: 'Karibevu',
+    species: 'Murraya koenigii',
+    commonAliases: ['Kadi Patta', 'Sweet Neem', 'Kariveppilai', 'Karibevu Gida'],
+    category: 'Vegetable',
+    soilType: 'Well-draining red loamy soil with river sand and organic compost',
+    wateringGuide: 'Water every 2–3 days when topsoil dries; feed diluted sour buttermilk monthly',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 3,
+    fertilizingDays: 21,
+    pruningDays: 45,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Indispensable aromatic plant for Karnataka and South Indian cooking. Thrives in full sun; pinch flower buds to keep energy focused on lush fragrant leaves.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'drumstick',
+    name: 'Drumstick (Moringa)',
+    kannadaName: 'ನುಗ್ಗೆಕಾಯಿ ಗಿಡ',
+    kannadaTransliteration: 'Nuggekayi Gida',
+    species: 'Moringa oleifera',
+    commonAliases: ['Nuggekayi', 'Nugge Soppu', 'Moringa', 'Sahjan', 'Murungai'],
+    category: 'Vegetable',
+    soilType: 'Fast-draining sandy red loam (avoid heavy waterlogged clay)',
+    wateringGuide: 'Water every 3–4 days for potted plants; very drought-tolerant once established',
+    imageUrl: '/images/plants/vegetables.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 4,
+    fertilizingDays: 30,
+    pruningDays: 60,
+    illustrationType: 'generic',
+    roomDefault: 'Courtyard / Outdoor',
+    careNotes:
+      'Superfood tree prized for both Nugge Soppu (leaves) and drumsticks. Dwarf PKM-1 varieties can be pruned to bush height in large terrace drums with full sun.',
+    difficulty: 'Easy',
+  },
+
+  // =========================================================================
+  // INDIAN & KARNATAKA FRUIT PLANTS
+  // =========================================================================
+  {
+    id: 'indian-lemon',
+    name: 'Indian Lemon (Kagzi Lime)',
+    kannadaName: 'ನಿಂಬೆ ಗಿಡ',
+    kannadaTransliteration: 'Nimbe Gida',
+    species: 'Citrus aurantiifolia',
+    commonAliases: ['Nimbe', 'Nimbehannu', 'Nimbu', 'Kagzi Nimbu', 'Lime'],
+    category: 'Fruit',
+    soilType: 'Well-draining sandy red loam mixed with vermicompost and neem cake',
+    wateringGuide: 'Water deeply every 3 days; reduce slightly during flowering to aid fruit set',
+    imageUrl: '/images/plants/fruit.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 3,
+    fertilizingDays: 21,
+    pruningDays: 60,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'One of the easiest fruit trees to grow in large 18-inch Indian terrace pots. Requires 6+ hours of full sun and monthly citrus micronutrient or compost feeding.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'guava',
+    name: 'Guava',
+    kannadaName: 'ಸೀಬೆಹಣ್ಣು ಗಿಡ',
+    kannadaTransliteration: 'Seebehannu Gida',
+    species: 'Psidium guajava',
+    commonAliases: ['Seebehannu', 'Perale', 'Amrood', 'Peru', 'Pink Guava', 'Taiwan Pink Guava'],
+    category: 'Fruit',
+    soilType: 'Deep, fertile red loamy soil with organic compost and good drainage',
+    wateringGuide: 'Water deeply every 3 days in summer; avoid standing water during monsoon',
+    imageUrl: '/images/plants/fruit.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 3,
+    fertilizingDays: 30,
+    pruningDays: 90,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Hardy tropical fruit tree that fruits reliably in Karnataka courtyards and large grow bags (especially grafted Allahabad Safeda or Taiwan Pink varieties).',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'pomegranate',
+    name: 'Pomegranate',
+    kannadaName: 'ದಾಳಿಂಬೆ',
+    kannadaTransliteration: 'Dalimbe',
+    species: 'Punica granatum',
+    commonAliases: ['Anar', 'Bhagwa Pomegranate', 'Dalimbe Gida'],
+    category: 'Fruit',
+    soilType: 'Well-draining sandy loam with organic compost (tolerates dry spells well)',
+    wateringGuide: 'Water every 3–4 days consistently during fruiting to avoid skin splitting',
+    imageUrl: '/images/plants/fruit.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 4,
+    fertilizingDays: 30,
+    pruningDays: 90,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Thrives in warm, sunny regions across Karnataka (such as Koppal, Bagalkot, and Bengaluru terraces). Grafted Bhagwa varieties fruit well in large containers.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'mango',
+    name: 'Mango',
+    kannadaName: 'ಮಾವಿನ ಗಿಡ',
+    kannadaTransliteration: 'Mavina Gida',
+    species: 'Mangifera indica',
+    commonAliases: ['Mavu', 'Aam', 'Badami Mango', 'Alphonso', 'Mallika Mango', 'Amrapali Dwarf Mango'],
+    category: 'Fruit',
+    soilType: 'Deep, well-drained red loamy soil enriched with compost and bonemeal',
+    wateringGuide: 'Water deeply every 4 days for young or potted trees; hold back slightly before flowering',
+    imageUrl: '/images/plants/fruit.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 4,
+    fertilizingDays: 30,
+    pruningDays: 120,
+    illustrationType: 'generic',
+    roomDefault: 'Courtyard / Outdoor',
+    careNotes:
+      'The king of Indian fruits! Dwarf grafted varieties like Amrapali and Mallika succeed in large terrace drums with 6–8 hours of direct sunlight.',
+    difficulty: 'Moderate',
+  },
+  {
+    id: 'papaya',
+    name: 'Papaya',
+    kannadaName: 'ಪಪ್ಪಾಯಿ',
+    kannadaTransliteration: 'Pappayi',
+    species: 'Carica papaya',
+    commonAliases: ['Parangi Hannu', 'Pawpaw', 'Red Lady Papaya', 'Pappayi Gida'],
+    category: 'Fruit',
+    soilType: 'Very porous, fertile sandy red loam with excellent drainage',
+    wateringGuide: 'Water every 3 days; never allow water to pool around the soft trunk base',
+    imageUrl: '/images/plants/fruit.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 3,
+    fertilizingDays: 21,
+    pruningDays: 90,
+    illustrationType: 'generic',
+    roomDefault: 'Courtyard / Outdoor',
+    careNotes:
+      'Fast-fruiting tropical plant that begins producing within 9–10 months in warm Indian gardens. Red Lady dwarf varieties also grow well in oversized terrace drums.',
+    difficulty: 'Moderate',
+  },
+  {
+    id: 'banana',
+    name: 'Banana',
+    kannadaName: 'ಬಾಳೆ ಗಿಡ',
+    kannadaTransliteration: 'Bale Gida',
+    species: 'Musa acuminata',
+    commonAliases: ['Bale', 'Yelakki Banana', 'Elakki Bale', 'Kela', 'Dwarf Cavendish'],
+    category: 'Fruit',
+    soilType: 'Rich, deep, moisture-retentive loamy soil loaded with organic compost',
+    wateringGuide: 'Water generously every 2 days; mulch heavily to retain root moisture',
+    imageUrl: '/images/plants/fruit.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 60,
+    illustrationType: 'generic',
+    roomDefault: 'Courtyard / Outdoor',
+    careNotes:
+      'Beloved across Karnataka for sweet Yelakki fruits and festive banana leaves. Needs full sunlight, wind shelter, and rich potassium-heavy organic feeding.',
+    difficulty: 'Moderate',
+  },
+  {
+    id: 'sapota',
+    name: 'Sapota (Chikoo)',
+    kannadaName: 'ಸಪೋಟ / ಚಿಕ್ಕು',
+    kannadaTransliteration: 'Sapota Chikku',
+    species: 'Manilkara zapota',
+    commonAliases: ['Chikoo', 'Chikku', 'Sapodilla', 'Kalipatti Sapota'],
+    category: 'Fruit',
+    soilType: 'Deep, well-draining red loam or sandy loam with compost',
+    wateringGuide: 'Water every 4 days in warm seasons; very resilient in tropical climates',
+    imageUrl: '/images/plants/fruit.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 4,
+    fertilizingDays: 30,
+    pruningDays: 120,
+    illustrationType: 'generic',
+    roomDefault: 'Courtyard / Outdoor',
+    careNotes:
+      'Evergreen tropical fruit tree thriving in coastal and southern Karnataka. Grafted Kalipatti plants stay compact enough for large terrace planters.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'custard-apple',
+    name: 'Custard Apple (Sitaphal)',
+    kannadaName: 'ಸೀತಾಫಲ',
+    kannadaTransliteration: 'Seethaphala',
+    species: 'Annona squamosa',
+    commonAliases: ['Sitaphal', 'Sugar Apple', 'Sharifa', 'Sitaphala'],
+    category: 'Fruit',
+    soilType: 'Well-draining sandy or rocky red loam (dislikes waterlogged clay)',
+    wateringGuide: 'Water every 4–5 days; naturally drought-tolerant in dry Deccan summers',
+    imageUrl: '/images/plants/fruit.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 5,
+    fertilizingDays: 30,
+    pruningDays: 120,
+    illustrationType: 'generic',
+    roomDefault: 'Courtyard / Outdoor',
+    careNotes:
+      'Sweet, creamy tropical fruit tree ideally suited to Karnataka’s dry and semi-arid climates. Sheds leaves briefly in late winter before fresh spring growth.',
+    difficulty: 'Easy',
+  },
+
+  // =========================================================================
+  // INDIAN & KARNATAKA MEDICINAL & TRADITIONAL PLANTS
+  // =========================================================================
+  {
+    id: 'tulsi',
+    name: 'Holy Basil (Tulsi)',
+    kannadaName: 'ತುಳಸಿ',
+    kannadaTransliteration: 'Tulasi',
+    species: 'Ocimum tenuiflorum',
+    commonAliases: ['Tulsi', 'Rama Tulsi', 'Krishna Tulsi', 'Sacred Basil', 'Tulasi Gida'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Fertile, well-draining red garden soil mixed with cocopeat and vermicompost',
+    wateringGuide: 'Water lightly every 1–2 days in morning sun; avoid standing water in the pot',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 21,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Sacred medicinal herb found in nearly every Karnataka home. Needs 4–6 hours of sunlight; regularly pinch off seed stalks (manjari) to keep foliage lush and long-lived.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'mint',
+    name: 'Mint (Pudina)',
+    kannadaName: 'ಪುದೀನ',
+    kannadaTransliteration: 'Pudina',
+    species: 'Mentha spicata',
+    commonAliases: ['Pudina', 'Spearmint', 'Garden Mint', 'Pudina Soppu'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Moist, humus-rich potting mix of garden soil, cocopeat, and vermicompost',
+    wateringGuide: 'Water every 1–2 days so soil never dries out completely',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Bright indirect',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 15,
+    illustrationType: 'generic',
+    roomDefault: 'Kitchen',
+    careNotes:
+      'Fast-spreading cooling culinary and digestive herb. Grow in its own wide pot so runners don’t crowd other plants, and snip tips frequently for fresh shoots.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'doddapatre',
+    name: 'Indian Borage (Ajwain Plant)',
+    kannadaName: 'ದೊಡ್ಡಪತ್ರೆ',
+    kannadaTransliteration: 'Doddapatre',
+    species: 'Coleus amboinicus',
+    commonAliases: ['Sambar Balli', 'Ajwain Plant', 'Karpooravalli', 'Mexican Mint', 'Omavalli', 'Cuban Oregano'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Fast-draining sandy red soil mixed with light compost',
+    wateringGuide: 'Water every 3–4 days once topsoil dries; succulent leaves store moisture',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Bright indirect',
+    wateringDays: 4,
+    fertilizingDays: 30,
+    pruningDays: 45,
+    illustrationType: 'succulent',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Household favorite in Karnataka (Doddapatre / Sambar Balli) used for traditional tambuli, chutney, and soothing coughs. Propagates effortlessly from a single stem cutting.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'lemongrass',
+    name: 'Lemongrass',
+    kannadaName: 'ನಿಂಬೆ ಹುಲ್ಲು',
+    kannadaTransliteration: 'Nimbe Hullu',
+    species: 'Cymbopogon citratus',
+    commonAliases: ['Malabar Grass', 'Gavati Chaha', 'Fever Grass', 'Tea Grass'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Fertile, moist, well-draining red loamy soil with compost',
+    wateringGuide: 'Water every 2 days in sunny weather; loves warm tropical rain',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 30,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Citrus-scented medicinal grass brewed in Indian herbal tea and kashaya, while naturally deterring mosquitoes around balconies and sit-outs.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'neem',
+    name: 'Neem',
+    kannadaName: 'ಬೇವು',
+    kannadaTransliteration: 'Bevu',
+    species: 'Azadirachta indica',
+    commonAliases: ['Bevina Mara', 'Indian Lilac', 'Margosa Tree', 'Ugadi Bevu'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Sandy or red well-draining garden soil (tolerates lean dry soils easily)',
+    wateringGuide: 'Water every 4–5 days for young potted saplings; drought-hardy once established',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 5,
+    fertilizingDays: 45,
+    pruningDays: 90,
+    illustrationType: 'generic',
+    roomDefault: 'Courtyard / Outdoor',
+    careNotes:
+      'Revered traditional Indian medicinal tree (essential during Ugadi in Karnataka). Young saplings thrive in deep sunny courtyard pots with minimal fuss.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'ashwagandha',
+    name: 'Ashwagandha',
+    kannadaName: 'ಅಶ್ವಗಂಧ',
+    kannadaTransliteration: 'Ashwagandha',
+    species: 'Withania somnifera',
+    commonAliases: ['Hiremaddu', 'Hiremaddu Gida', 'Indian Ginseng', 'Winter Cherry'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Light sandy red loam with sharp drainage (avoid soggy soil)',
+    wateringGuide: 'Water moderately every 4–5 days; prefers dry-to-moderate Indian climate',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Direct sunlight',
+    wateringDays: 5,
+    fertilizingDays: 30,
+    pruningDays: 60,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Traditional Ayurvedic adaptogenic shrub that thrives in warm sunny balconies and Deccan climates. Avoid overwatering and provide 6+ hours of direct sunlight.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'brahmi',
+    name: 'Brahmi (Gotu Kola)',
+    kannadaName: 'ಒಂದೆಲಗ / ಬ್ರಾಹ್ಮಿ',
+    kannadaTransliteration: 'Ondelaga Brahmi',
+    species: 'Centella asiatica',
+    commonAliases: ['Ondelaga', 'Timare', 'Gotu Kola', 'Indian Pennywort', 'Mandukaparni'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Consistently moist, humus-rich loamy soil with cocopeat and vermicompost',
+    wateringGuide: 'Water daily or every 1–2 days; thrives in damp soil and shaded verandahs',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Bright indirect',
+    wateringDays: 1,
+    fertilizingDays: 21,
+    pruningDays: 30,
+    illustrationType: 'generic',
+    roomDefault: 'Balcony Room',
+    careNotes:
+      'Classic Malnad & Coastal Karnataka herb (Ondelaga / Timare) used in traditional tambuli and Ayurvedic tonics. Spreads rapidly in shallow moist planters.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'turmeric',
+    name: 'Turmeric',
+    kannadaName: 'ಅರಿಶಿನ',
+    kannadaTransliteration: 'Arishina',
+    species: 'Curcuma longa',
+    commonAliases: ['Arishina', 'Haldi', 'Indian Saffron', 'Arishina Gida'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Loose, rich, well-draining red loamy soil loaded with organic compost',
+    wateringGuide: 'Keep soil evenly moist every 2 days during active monsoon-summer growth',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Bright indirect',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 90,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Tropical rhizome plant whose lush green leaves are also used to steam Karnataka Patholi / Kadubu. Plant fresh rhizomes before monsoon and harvest in 8–9 months.',
+    difficulty: 'Easy',
+  },
+  {
+    id: 'ginger',
+    name: 'Ginger',
+    kannadaName: 'ಶುಂಠಿ',
+    kannadaTransliteration: 'Shunti',
+    species: 'Zingiber officinale',
+    commonAliases: ['Shunti', 'Adrak', 'Inji', 'Hasi Shunti'],
+    category: 'Medicinal & Traditional',
+    soilType: 'Loose, fertile, humus-rich sandy loam mixed with cocopeat and vermicompost',
+    wateringGuide: 'Water every 2 days to maintain light moisture without waterlogging rhizomes',
+    imageUrl: '/images/plants/tulsi.jpg',
+    light: 'Bright indirect',
+    wateringDays: 2,
+    fertilizingDays: 21,
+    pruningDays: 90,
+    illustrationType: 'generic',
+    roomDefault: 'Terrace / Garden',
+    careNotes:
+      'Aromatic medicinal and culinary rhizome ideal for wide, shaded grow bags in warm humid climates. Thrives in filtered sun and rich organic mulch.',
+    difficulty: 'Easy',
   },
 ];
 
 /**
- * Searches the plant database by common name, scientific botanical name, or alias
+ * Returns catalog plants filtered by optional category.
  */
-export function searchPlantCatalog(query: string): PlantCatalogItem[] {
+export function getPlantsByCategory(category?: PlantCategory | 'All'): PlantCatalogItem[] {
+  if (!category || category === 'All') {
+    return PLANT_DATABASE;
+  }
+  return PLANT_DATABASE.filter((plant) => plant.category === category);
+}
+
+/**
+ * Searches the plant database by common English name, Kannada name (script or
+ * Romanized transliteration), local aliases, category, or optional botanical name.
+ */
+export function searchPlantCatalog(
+  query: string,
+  category: PlantCategory | 'All' = 'All'
+): PlantCatalogItem[] {
   const q = query.trim().toLowerCase();
-  if (!q) return [];
+  const sourcePool = getPlantsByCategory(category);
+
+  if (!q) {
+    return category === 'All' ? [] : sourcePool;
+  }
 
   const seenIds = new Set<string>();
   const matches: PlantCatalogItem[] = [];
 
-  for (const plant of PLANT_DATABASE) {
+  for (const plant of sourcePool) {
     if (seenIds.has(plant.id)) continue;
 
     const nameMatch = plant.name.toLowerCase().includes(q);
-    const speciesMatch = plant.species.toLowerCase().includes(q);
-    const aliasMatch = plant.commonAliases?.some((a) => a.toLowerCase().includes(q));
+    const kannadaScriptMatch = Boolean(plant.kannadaName && plant.kannadaName.toLowerCase().includes(q));
+    const kannadaTranslitMatch = Boolean(
+      plant.kannadaTransliteration && plant.kannadaTransliteration.toLowerCase().includes(q)
+    );
+    const speciesMatch = Boolean(plant.species && plant.species.toLowerCase().includes(q));
+    const aliasMatch = Boolean(plant.commonAliases?.some((a) => a.toLowerCase().includes(q)));
+    const categoryMatch = plant.category.toLowerCase().includes(q);
 
-    if (nameMatch || speciesMatch || aliasMatch) {
+    if (
+      nameMatch ||
+      kannadaScriptMatch ||
+      kannadaTranslitMatch ||
+      speciesMatch ||
+      aliasMatch ||
+      categoryMatch
+    ) {
       seenIds.add(plant.id);
       matches.push(plant);
     }
   }
 
-  // Rank matches: exact/prefix matches first
+  // Rank matches: exact matches first, then prefix matches across English & Kannada names
   matches.sort((a, b) => {
-    const aName = a.name.toLowerCase();
-    const bName = b.name.toLowerCase();
-    const aExact = aName === q || a.species.toLowerCase() === q;
-    const bExact = bName === q || b.species.toLowerCase() === q;
+    const aKeys = [
+      a.name.toLowerCase(),
+      a.kannadaName?.toLowerCase() || '',
+      a.kannadaTransliteration?.toLowerCase() || '',
+      a.species?.toLowerCase() || '',
+      ...(a.commonAliases?.map((al) => al.toLowerCase()) || []),
+    ].filter(Boolean);
+
+    const bKeys = [
+      b.name.toLowerCase(),
+      b.kannadaName?.toLowerCase() || '',
+      b.kannadaTransliteration?.toLowerCase() || '',
+      b.species?.toLowerCase() || '',
+      ...(b.commonAliases?.map((al) => al.toLowerCase()) || []),
+    ].filter(Boolean);
+
+    const aExact = aKeys.some((k) => k === q);
+    const bExact = bKeys.some((k) => k === q);
     if (aExact && !bExact) return -1;
     if (!aExact && bExact) return 1;
 
-    const aStarts = aName.startsWith(q) || a.species.toLowerCase().startsWith(q);
-    const bStarts = bName.startsWith(q) || b.species.toLowerCase().startsWith(q);
+    const aStarts = aKeys.some((k) => k.startsWith(q));
+    const bStarts = bKeys.some((k) => k.startsWith(q));
     if (aStarts && !bStarts) return -1;
     if (!aStarts && bStarts) return 1;
 

@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Plant, CareType, CareReminder } from '../../types/plant';
+import { KarnatakaClimateZoneId } from '../../types/seasonal';
 import { PlantIllustration } from '../plants/PlantIllustration';
 import { addDays, getDaysDifference, formatDueDateLabel } from '../../utils/dateUtils';
+import { INDIAN_SEASONS } from '../../data/indianSeasonalCare';
+import {
+  getCurrentIndianSeason,
+  getSeasonalReminderSuggestions,
+} from '../../utils/seasonalCareEngine';
 import {
   Droplets,
   Sparkles,
@@ -10,6 +16,9 @@ import {
   AlertTriangle,
   CheckCircle2,
   RotateCw,
+  Sun,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 interface RemindersProps {
@@ -17,6 +26,7 @@ interface RemindersProps {
   onLogCare: (plantId: string, careType: CareType) => void;
   onSnoozeCare: (plantId: string, careType: CareType, days: number) => void;
   onOpenPlantDetail: (plant: Plant) => void;
+  climateZone?: KarnatakaClimateZoneId;
 }
 
 export const Reminders: React.FC<RemindersProps> = ({
@@ -24,9 +34,18 @@ export const Reminders: React.FC<RemindersProps> = ({
   onLogCare,
   onSnoozeCare,
   onOpenPlantDetail,
+  climateZone = 'general-karnataka',
 }) => {
   const [activeFilter, setActiveFilter] = useState<'all' | 'overdue' | 'today' | 'upcoming'>('all');
   const [completedIds, setCompletedIds] = useState<Record<string, boolean>>({});
+  const [showSeasonalTips, setShowSeasonalTips] = useState(true);
+
+  const currentSeason = useMemo(() => getCurrentIndianSeason(), []);
+  const seasonMeta = INDIAN_SEASONS[currentSeason];
+  const seasonalSuggestions = useMemo(
+    () => getSeasonalReminderSuggestions(plants, currentSeason, climateZone, 4),
+    [plants, currentSeason, climateZone]
+  );
 
   // Compute all reminders across plants
   const allReminders: CareReminder[] = [];
@@ -142,6 +161,81 @@ export const Reminders: React.FC<RemindersProps> = ({
           Review upcoming and overdue tasks so your plants stay nourished, hydrated, and trimmed.
         </p>
       </div>
+
+      {/* Non-intrusive Seasonal Advisory Suggestions (never alters or duplicates existing reminders) */}
+      {seasonalSuggestions.length > 0 && (
+        <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-2xl p-4 sm:p-5 space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center justify-center shrink-0">
+                <Sun className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="text-sm font-semibold text-emerald-950 font-display flex flex-wrap items-center gap-1.5">
+                  <span>Seasonal Care Suggestions</span>
+                  <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-white border border-emerald-200 text-emerald-800">
+                    {seasonMeta.name} · {seasonMeta.monthsLabel}
+                  </span>
+                </h2>
+                <p className="text-[11px] text-stone-600 mt-0.5">
+                  Optional Indian seasonal guidance alongside your schedule — your existing reminders remain unchanged.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowSeasonalTips((prev) => !prev)}
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-emerald-900 bg-white hover:bg-emerald-100/70 border border-emerald-200 rounded-lg transition-colors shrink-0"
+              aria-expanded={showSeasonalTips}
+            >
+              <span>{showSeasonalTips ? 'Hide' : 'Show'}</span>
+              {showSeasonalTips ? (
+                <ChevronUp className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5" />
+              )}
+            </button>
+          </div>
+
+          {showSeasonalTips && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1">
+              {seasonalSuggestions.map((item) => {
+                const plantObj = plants.find((p) => p.id === item.plantId);
+                return (
+                  <div
+                    key={item.id}
+                    className="p-3 bg-white rounded-xl border border-stone-200/80 shadow-2xs space-y-1"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <button
+                        type="button"
+                        onClick={() => plantObj && onOpenPlantDetail(plantObj)}
+                        className="text-xs font-semibold text-emerald-950 hover:text-emerald-700 transition-colors text-left truncate"
+                      >
+                        {item.plantName}{' '}
+                        <span className="font-normal text-stone-500">· {item.plantRoom}</span>
+                      </button>
+                      <span
+                        className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border shrink-0 ${
+                          item.priority === 'high'
+                            ? 'bg-amber-50 text-amber-800 border-amber-200'
+                            : 'bg-sky-50 text-sky-800 border-sky-200'
+                        }`}
+                      >
+                        {item.title}
+                      </span>
+                    </div>
+                    <p className="text-xs text-stone-600 leading-relaxed">
+                      {item.suggestion}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Status Filter Tabs (Button-like segmented controls) */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">

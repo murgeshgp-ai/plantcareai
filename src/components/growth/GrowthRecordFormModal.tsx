@@ -126,7 +126,13 @@ export const GrowthRecordFormModal: React.FC<GrowthRecordFormModalProps> = ({
               {recordToEdit ? 'Edit Growth Record' : 'Record Plant Growth'}
             </h3>
             <p className="text-xs text-stone-500 mt-0.5">
-              {plant.name} <span className="text-stone-300">·</span> {plant.species}
+              {plant.name}
+              {plant.species ? (
+                <>
+                  {' '}
+                  <span className="text-stone-300">·</span> {plant.species}
+                </>
+              ) : null}
             </p>
           </div>
           <button

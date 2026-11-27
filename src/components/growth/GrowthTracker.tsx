@@ -210,9 +210,11 @@ export const GrowthTracker: React.FC<GrowthTrackerProps> = ({
                 <span>{currentPlant.room}</span>
               </span>
             </div>
-            <p className="text-xs italic text-stone-500 mt-0.5">
-              {currentPlant.species}
-            </p>
+            {currentPlant.species && (
+              <p className="text-xs italic text-stone-500 mt-0.5">
+                {currentPlant.species}
+              </p>
+            )}
             <div className="mt-2 text-xs text-stone-500 flex items-center gap-2 font-mono">
               <span>Light: {currentPlant.light}</span>
               <span className="text-stone-300">·</span>

@@ -2,8 +2,10 @@ import React from 'react';
 import { Plant, CareType } from '../../types/plant';
 import { GrowthRecord } from '../../types/growth';
 import { HealthAssessment } from '../../types/health';
+import { KarnatakaClimateZoneId } from '../../types/seasonal';
 import { PlantIllustration } from './PlantIllustration';
 import { HealthScoreBadge } from '../health/HealthScoreBadge';
+import { PlantSeasonalCareCard } from '../seasonal/PlantSeasonalCareCard';
 import { calculatePlantHealthScore, getHealthBadgeColors } from '../../utils/healthCalculator';
 import { addDays, getDaysDifference, formatDueDateLabel, formatDatePretty } from '../../utils/dateUtils';
 import {
@@ -37,6 +39,7 @@ interface PlantDetailModalProps {
   onOpenHealthAssessment?: (plant: Plant) => void;
   onOpenAIAssistant?: (plant: Plant) => void;
   onOpenDiagnosis?: (plant: Plant) => void;
+  climateZone?: KarnatakaClimateZoneId;
 }
 
 export const PlantDetailModal: React.FC<PlantDetailModalProps> = ({
@@ -50,6 +53,7 @@ export const PlantDetailModal: React.FC<PlantDetailModalProps> = ({
   onOpenHealthAssessment,
   onOpenAIAssistant,
   onOpenDiagnosis,
+  climateZone = 'general-karnataka',
 }) => {
   if (!plant) return null;
 
@@ -119,9 +123,11 @@ export const PlantDetailModal: React.FC<PlantDetailModalProps> = ({
               <h2 className="text-xl font-bold text-stone-900 font-display">
                 {plant.name}
               </h2>
-              <p className="text-xs italic text-stone-500 mt-0.5">
-                {plant.species}
-              </p>
+              {plant.species && (
+                <p className="text-xs italic text-stone-500 mt-0.5">
+                  {plant.species}
+                </p>
+              )}
             </div>
             <div className="text-right">
               <span className="inline-block text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
@@ -393,10 +399,13 @@ export const PlantDetailModal: React.FC<PlantDetailModalProps> = ({
               <Info className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold text-stone-900 block mb-0.5">Care Tip</span>
-                <p className="text-stone-600 leading-relaxed">{plant.notes}</p>
+                <p className="text-stone-600 leading-relaxed whitespace-pre-line">{plant.notes}</p>
               </div>
             </div>
           )}
+
+          {/* Indian Seasonal Care Tips */}
+          <PlantSeasonalCareCard plant={plant} climateZone={climateZone} />
 
           {/* Growth Tracker Direct Access */}
           {onOpenGrowthTracker && (

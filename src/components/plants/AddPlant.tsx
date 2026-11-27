@@ -1,7 +1,13 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { Plant, LightRequirement } from '../../types/plant';
 import { getTodayString } from '../../utils/dateUtils';
-import { searchPlantCatalog, PlantCatalogItem } from '../../data/plantDatabase';
+import {
+  PLANT_DATABASE,
+  PLANT_CATEGORIES,
+  PlantCategory,
+  searchPlantCatalog,
+  PlantCatalogItem,
+} from '../../data/plantDatabase';
 import { identifyPlant, AiApiError, PlantIdentificationResult } from '../../services/aiApi';
 import { 
   Upload, 
@@ -144,6 +150,7 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
   const [lastWatered, setLastWatered] = useState(getTodayString());
   const [notes, setNotes] = useState('');
   const [illustrationType, setIllustrationType] = useState<Plant['illustrationType']>('generic');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Plant['difficulty'] | null>(null);
   
   // Image State
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -161,14 +168,15 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
 
   // Search & Catalog / Preset State
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<PlantCategory | 'All'>('All');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   const [catalogNotice, setCatalogNotice] = useState<string | null>(null);
 
   const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    return searchPlantCatalog(searchQuery);
-  }, [searchQuery]);
+    if (!searchQuery.trim() && selectedCategory === 'All') return [];
+    return searchPlantCatalog(searchQuery, selectedCategory);
+  }, [searchQuery, selectedCategory]);
 
   // Helper to handle uploaded image file
   const handleImageFile = (file: File) => {
@@ -306,6 +314,7 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
         if (result.pruningDays) setPruningDays(result.pruningDays);
         if (result.careNotes) setNotes(result.careNotes);
         if (result.illustrationType) setIllustrationType(result.illustrationType);
+        setSelectedDifficulty(null);
 
         setErrors({});
         setIsIdentifying(false);
@@ -353,6 +362,7 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
     setNotes(preset.notes); // Overwrites notes cleanly with no stale values
     setImagePreview(preset.imageUrl); // Overwrites photograph cleanly
     setSelectedPreset(preset.name);
+    setSelectedDifficulty(null);
     setErrors({});
     setAiError(null);
     setAiResult(null);
@@ -362,23 +372,41 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
 
   const applyCatalogItem = (item: PlantCatalogItem) => {
     setName(item.name);
-    setSpecies(item.species);
+    setSpecies(item.species || '');
     setLight(item.light);
     setWateringDays(item.wateringDays);
     setFertilizingDays(item.fertilizingDays);
     setPruningDays(item.pruningDays);
     setIllustrationType(item.illustrationType);
     setRoom(item.roomDefault || 'Living Room');
-    setNotes(item.careNotes); // Overwrites notes cleanly with no stale values
+
+    const noteParts = [
+      item.kannadaName
+        ? `Kannada name: ${item.kannadaName}${
+            item.kannadaTransliteration ? ` (${item.kannadaTransliteration})` : ''
+          }`
+        : '',
+      `Category: ${item.category} · Soil: ${item.soilType}`,
+      item.wateringGuide ? `Watering: ${item.wateringGuide}` : '',
+      item.careNotes,
+    ].filter(Boolean);
+    setNotes(noteParts.join('\n')); // Overwrites notes cleanly with no stale values
+
     setImagePreview(item.imageUrl); // Overwrites photograph cleanly
     setSelectedPreset(item.name);
+    setSelectedDifficulty(item.difficulty);
     setSearchQuery('');
+    setSelectedCategory('All');
     setIsSearchFocused(false);
     setErrors({});
     setAiError(null);
     setAiResult(null);
     setFailedAfterRetries(false);
-    setCatalogNotice(`Populated details for "${item.name}" (${item.species}). You can review and edit below.`);
+    const localSuffix = item.kannadaName ? ` — ${item.kannadaName}` : '';
+    const speciesSuffix = item.species ? ` (${item.species})` : '';
+    setCatalogNotice(
+      `Populated details for "${item.name}"${localSuffix}${speciesSuffix}. You can review and edit below.`
+    );
     setMode('manual');
     setTimeout(() => {
       formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -388,10 +416,9 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate
+    // Validate (botanical name is optional for users)
     const newErrors: Record<string, string> = {};
     if (!name.trim()) newErrors.name = 'Please enter a plant name.';
-    if (!species.trim()) newErrors.species = 'Please enter or select a species.';
     if (wateringDays < 1) newErrors.watering = 'Watering frequency must be at least 1 day.';
 
     if (Object.keys(newErrors).length > 0) {
@@ -415,7 +442,9 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
       lastPruned: getTodayString(),
       health: 'thriving',
       notes: notes.trim() || undefined,
-      difficulty: wateringDays <= 4 ? 'Demanding' : wateringDays <= 10 ? 'Moderate' : 'Easy',
+      difficulty:
+        selectedDifficulty ||
+        (wateringDays <= 4 ? 'Demanding' : wateringDays <= 10 ? 'Moderate' : 'Easy'),
       createdAt: getTodayString(),
     };
 
@@ -449,8 +478,32 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
             </h2>
           </div>
           <span className="text-xs text-stone-500">
-            Search 28+ house & garden species (e.g. Tulip, Monstera, Fiddle Leaf)
+            Search {PLANT_DATABASE.length} Indian &amp; global plants in English or ಕನ್ನಡ (e.g. Tulsi / ತುಳಸಿ, Mallige / ಮಲ್ಲಿಗೆ, Monstera)
           </span>
+        </div>
+
+        {/* Category Filter Buttons */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          {(['All', ...PLANT_CATEGORIES] as const).map((category) => {
+            const isActive = selectedCategory === category;
+            return (
+              <button
+                key={category}
+                type="button"
+                onClick={() => {
+                  setSelectedCategory(category);
+                  setIsSearchFocused(category !== 'All' || searchQuery.trim().length > 0);
+                }}
+                className={`text-[11px] font-medium px-2.5 py-1 rounded-lg border transition-colors ${
+                  isActive
+                    ? 'bg-emerald-800 text-white border-emerald-800'
+                    : 'bg-stone-50 text-stone-600 border-stone-200/90 hover:bg-emerald-50 hover:text-emerald-900 hover:border-emerald-300'
+                }`}
+              >
+                {category === 'All' ? 'All Categories' : category}
+              </button>
+            );
+          })}
         </div>
 
         <div className="relative">
@@ -458,7 +511,7 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
             <Search className="w-4 h-4 text-stone-400 shrink-0" />
             <input
               type="text"
-              placeholder="Type common name (e.g. Tulip, Snake Plant) or botanical genus (e.g. Tulipa, Ficus)..."
+              placeholder="Search in English or Kannada (e.g. Tulsi, ತುಳಸಿ, Hibiscus, ದಾಸವಾಳ, Mallige, Monstera)..."
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -467,11 +520,13 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
               onFocus={() => setIsSearchFocused(true)}
               className="flex-1 bg-transparent text-sm text-stone-900 placeholder:text-stone-400 outline-none"
             />
-            {searchQuery && (
+            {(searchQuery || selectedCategory !== 'All') && (
               <button
                 type="button"
                 onClick={() => {
                   setSearchQuery('');
+                  setSelectedCategory('All');
+                  setIsSearchFocused(false);
                 }}
                 className="p-1 text-stone-400 hover:text-stone-700 rounded-md transition-colors"
                 aria-label="Clear search input"
@@ -482,7 +537,7 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
           </div>
 
           {/* Search Results Dropdown Overlay */}
-          {isSearchFocused && searchQuery.trim().length > 0 && (
+          {isSearchFocused && (searchQuery.trim().length > 0 || selectedCategory !== 'All') && (
             <>
               <div 
                 className="fixed inset-0 z-20" 
@@ -492,7 +547,11 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
                 {searchResults.length > 0 ? (
                   <div className="divide-y divide-stone-100">
                     <div className="px-3.5 py-2 bg-stone-50/90 text-[11px] font-semibold text-stone-500 uppercase tracking-wider flex items-center justify-between">
-                      <span>Matching Plant Suggestions ({searchResults.length})</span>
+                      <span>
+                        {selectedCategory !== 'All' && !searchQuery.trim()
+                          ? `${selectedCategory} Plants (${searchResults.length})`
+                          : `Matching Plant Suggestions (${searchResults.length})`}
+                      </span>
                       <span>Click to auto-populate form</span>
                     </div>
                     {searchResults.map((item) => (
@@ -506,22 +565,34 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
                           <img
                             src={item.imageUrl}
                             alt={item.name}
+                            referrerPolicy="no-referrer"
                             onError={(e) => {
                               (e.currentTarget as HTMLImageElement).src = '/images/plants/generic.jpg';
                             }}
                             className="w-12 h-12 rounded-lg object-cover border border-stone-200 shrink-0 group-hover:scale-105 transition-transform"
                           />
                           <div className="min-w-0">
-                            <div className="text-sm font-semibold text-stone-900 group-hover:text-emerald-950 flex items-center gap-2">
+                            <div className="text-sm font-semibold text-stone-900 group-hover:text-emerald-950 flex flex-wrap items-center gap-1.5">
                               <span>{item.name}</span>
+                              {item.kannadaName && (
+                                <span className="text-xs font-medium text-emerald-800">
+                                  ({item.kannadaName}
+                                  {item.kannadaTransliteration ? ` · ${item.kannadaTransliteration}` : ''})
+                                </span>
+                              )}
+                              <span className="text-[10px] font-medium text-stone-700 bg-stone-100 border border-stone-200/70 px-1.5 py-0.2 rounded">
+                                {item.category}
+                              </span>
                               <span className="text-[10px] font-medium text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-1.5 py-0.2 rounded">
                                 {item.difficulty}
                               </span>
                             </div>
-                            <div className="text-xs font-mono italic text-emerald-700 truncate">
-                              {item.species}
-                            </div>
-                            <div className="flex items-center gap-2 mt-1 text-[11px] text-stone-500">
+                            {item.species && (
+                              <div className="text-xs font-mono italic text-emerald-700 truncate">
+                                {item.species}
+                              </div>
+                            )}
+                            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[11px] text-stone-500">
                               <span className="flex items-center gap-1">
                                 <SunMedium className="w-3 h-3 text-amber-600" />
                                 {item.light}
@@ -530,6 +601,10 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
                               <span className="flex items-center gap-1">
                                 <Droplets className="w-3 h-3 text-sky-600" />
                                 Water every {item.wateringDays}d
+                              </span>
+                              <span>•</span>
+                              <span className="truncate max-w-[220px] sm:max-w-[280px]">
+                                Soil: {item.soilType}
                               </span>
                             </div>
                           </div>
@@ -551,12 +626,13 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
                       No matching plants found for "{searchQuery}"
                     </div>
                     <p className="text-xs text-stone-500 max-w-sm mx-auto">
-                      Try searching by common name (e.g., Tulip, Snake Plant, Fern) or botanical genus (e.g., Tulipa, Ficus, Sansevieria). You can also add plant details manually below.
+                      Try searching in English or Kannada (e.g., Tulsi / ತುಳಸಿ, Mallige / ಮಲ್ಲಿಗೆ, Brinjal / ಬದನೆಕಾಯಿ, Monstera). You can also add plant details manually below without a botanical name.
                     </p>
                     <button
                       type="button"
                       onClick={() => {
                         setSearchQuery('');
+                        setSelectedCategory('All');
                         setIsSearchFocused(false);
                       }}
                       className="mt-1 px-3 py-1.5 text-xs font-medium text-emerald-800 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors"
@@ -1062,19 +1138,18 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
                     {errors.name && <p className="text-xs text-red-600 mt-1">{errors.name}</p>}
                   </div>
 
-                  {/* Botanical Species */}
+                  {/* Botanical Species (Optional) */}
                   <div>
                     <label className="block text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5">
-                      Botanical / Scientific Species *
+                      Botanical Name (Optional)
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Monstera deliciosa"
+                      placeholder="e.g. Ocimum tenuiflorum or Monstera deliciosa (optional)"
                       value={species}
                       onChange={(e) => setSpecies(e.target.value)}
                       className="w-full px-3.5 py-2 text-sm bg-white border border-stone-200/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700 text-stone-900 placeholder:text-stone-400"
                     />
-                    {errors.species && <p className="text-xs text-red-600 mt-1">{errors.species}</p>}
                   </div>
                 </div>
 
@@ -1093,6 +1168,8 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
                       <option value="Bedroom">Bedroom</option>
                       <option value="Kitchen">Kitchen</option>
                       <option value="Balcony Room">Balcony Room</option>
+                      <option value="Terrace / Garden">Terrace / Garden</option>
+                      <option value="Courtyard / Outdoor">Courtyard / Outdoor</option>
                       <option value="Home Office">Home Office</option>
                       <option value="Bathroom">Bathroom</option>
                       <option value="Patio">Patio</option>
@@ -1250,7 +1327,7 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
 
       {/* OPTION 2: ADD PLANT MANUALLY */}
       {mode === 'manual' && (
-        <div className="space-y-6">
+        <div ref={formSectionRef} className="space-y-6">
           {/* Quick Species Presets */}
           <div className="p-4 bg-emerald-50/70 border border-emerald-100/90 rounded-xl space-y-2.5">
             <div className="text-xs font-semibold text-emerald-900 flex items-center gap-1.5">
@@ -1367,7 +1444,7 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Monty, Swiss Cheese Plant"
+                    placeholder="e.g. Tulsi, Hibiscus, Monty"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full px-3.5 py-2 text-sm bg-white border border-stone-200/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700 text-stone-900 placeholder:text-stone-400"
@@ -1375,19 +1452,18 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
                   {errors.name && <p className="text-xs text-red-600 mt-1">{errors.name}</p>}
                 </div>
 
-                {/* Botanical Species */}
+                {/* Botanical Species (Optional) */}
                 <div>
                   <label className="block text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1.5">
-                    Botanical / Species *
+                    Botanical Name (Optional)
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Monstera deliciosa"
+                    placeholder="e.g. Ocimum tenuiflorum or Monstera deliciosa (optional)"
                     value={species}
                     onChange={(e) => setSpecies(e.target.value)}
                     className="w-full px-3.5 py-2 text-sm bg-white border border-stone-200/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700/20 focus:border-emerald-700 text-stone-900 placeholder:text-stone-400"
                   />
-                  {errors.species && <p className="text-xs text-red-600 mt-1">{errors.species}</p>}
                 </div>
               </div>
 
@@ -1406,6 +1482,8 @@ export const AddPlant: React.FC<AddPlantProps> = ({ onAddPlant, onCancel }) => {
                     <option value="Bedroom">Bedroom</option>
                     <option value="Kitchen">Kitchen</option>
                     <option value="Balcony Room">Balcony Room</option>
+                    <option value="Terrace / Garden">Terrace / Garden</option>
+                    <option value="Courtyard / Outdoor">Courtyard / Outdoor</option>
                     <option value="Home Office">Home Office</option>
                     <option value="Bathroom">Bathroom</option>
                     <option value="Patio">Patio</option>
